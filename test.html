@@ -101,14 +101,22 @@
         background-attachment: fixed;
       }
 
-      /* Mobile optimized background - lighter gradient instead of solid */
+      /* Mobile optimized background - match desktop gradient but optimized for mobile */
       .is-mobile body {
-        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a8a 50%, #0d1b2a 100%);
+        background:
+          radial-gradient(600px 400px at 80% 10%, color-mix(in oklab, var(--theme-accent) 30%, transparent), transparent 100%),
+          radial-gradient(500px 300px at 20% 120%, color-mix(in oklab, var(--theme-accent) 20%, transparent), transparent 100%),
+          radial-gradient(400px 250px at 0% 100%, color-mix(in oklab, var(--theme-accent) 25%, transparent), transparent 100%),
+          linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
         background-attachment: scroll;
       }
 
       .is-mobile html.dark body {
-        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a8a 50%, #0d1b2a 100%);
+        background:
+          radial-gradient(600px 400px at 80% 10%, color-mix(in oklab, var(--theme-accent) 30%, transparent), transparent 100%),
+          radial-gradient(500px 300px at 20% 120%, color-mix(in oklab, var(--theme-accent) 20%, transparent), transparent 100%),
+          radial-gradient(400px 250px at 0% 100%, color-mix(in oklab, var(--theme-accent) 25%, transparent), transparent 100%),
+          linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
         background-attachment: scroll;
       }
 
@@ -231,6 +239,11 @@
       .is-mobile #hero p,
       .is-mobile #about h2,
       .is-mobile #about p {
+        color: white !important;
+      }
+
+      /* Contact Me button text should be white on mobile */
+      .is-mobile #hero a[href="#contact-footer"] {
         color: white !important;
       }
 
