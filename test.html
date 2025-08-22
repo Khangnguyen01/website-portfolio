@@ -225,6 +225,21 @@
         opacity: 1;
         transform: none;
       }
+
+      /* Mobile text color overrides for better visibility */
+      .is-mobile #hero h1,
+      .is-mobile #hero p,
+      .is-mobile #about h2,
+      .is-mobile #about p {
+        color: white !important;
+      }
+
+      /* Ensure text remains readable on mobile gradient background */
+      .is-mobile .text-zinc-600,
+      .is-mobile .text-zinc-700,
+      .is-mobile .dark\:text-zinc-300 {
+        color: white !important;
+      }
     </style>
 
     <script>
