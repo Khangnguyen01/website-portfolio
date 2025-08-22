@@ -101,14 +101,14 @@
         background-attachment: fixed;
       }
 
-      /* Mobile optimized background - simpler solid color */
+      /* Mobile optimized background - lighter gradient instead of solid */
       .is-mobile body {
-        background: #540b0e !important;
+        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a8a 50%, #0d1b2a 100%);
         background-attachment: scroll;
       }
 
       .is-mobile html.dark body {
-        background: #540b0e !important;
+        background: linear-gradient(135deg, #0d1b2a 0%, #1e3a8a 50%, #0d1b2a 100%);
         background-attachment: scroll;
       }
 
@@ -473,7 +473,7 @@
       <!-- About -->
       <section id="about" class="py-20 sm:py-24">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 class="text-center text-3xl sm:text-4xl font-extrabold mb-6">About Me</h2>
+          <h2 class="text-center text-3xl sm:text-4xl font-extrabold mb-6 text-white">About Me</h2>
           <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
           <p class="text-zinc-700 text-justify dark:text-zinc-300 leading-relaxed max-w-6xl">
             A passionate data alchemist who transforms raw numbers into strategic narratives, I thrive at the crossroads of curiosity and rigor. With a mastery of SQL's intricate joins and window functions, I unearth hidden patterns from sprawling datasets. Python is my canvas: I wield Pandas and NumPy to sculpt data pipelines, apply scikit-learn to craft predictive models, and harness Matplotlib to paint compelling visual stories.
