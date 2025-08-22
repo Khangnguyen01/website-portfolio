@@ -16,19 +16,22 @@
     <!-- Inter Font -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" /></noscript>
     <!-- Handwriting fallback font for splash (in case Mistral isn't available) -->
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" /></noscript>
 
       <!-- Font Awesome -->
-      <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+      <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" onload="this.rel='stylesheet'"/>
+      <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/></noscript>
 
     <!-- Sacramento for handwriting intro -->
-    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" onload="this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" /></noscript>
 
     <!-- Tailwind CSS (CDN) -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com" defer></script>
     <script>
       // Tailwind config (extend, dark mode class)
       tailwind.config = {
@@ -468,7 +471,7 @@
             <div class="lg:justify-self-end animate-pop">
               <div class="relative p-2 rounded-[2rem] bg-gradient-to-tr from-brand-400/20 to-transparent">
                 <div class="rounded-[1.5rem] p-6 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-soft border border-zinc-200/70 dark:border-white/10">
-                  <img src="https://i.ibb.co/PGSdyWkZ/IMG-8518.jpg" alt="Working at a laptop" class="rounded-xl object-cover object-top aspect-[4/4] w-full" />
+                  <img src="https://i.ibb.co/PGSdyWkZ/IMG-8518.jpg" alt="Working at a laptop" class="rounded-xl object-cover object-top aspect-[4/4] w-full" loading="lazy" decoding="async" />
                   <div class="mt-4 flex items-center justify-between gap-4">
                     <div>
                       <p class="text-xs text-zinc-500 dark:text-zinc-400">Current role</p>
