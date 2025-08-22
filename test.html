@@ -101,10 +101,15 @@
         background-attachment: fixed;
       }
 
-      /* Mobile optimized background - simpler gradients */
+      /* Mobile optimized background - simpler solid color */
+      .is-mobile body {
+        background: #1b263b !important;
+        background-attachment: scroll;
+      }
+
       .is-mobile html.dark body {
-        background: linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
-        background-attachment: scroll; /* Better performance on mobile */
+        background: #1b263b !important;
+        background-attachment: scroll;
       }
 
       /* Subtle glass effect utility */
