@@ -3,45 +3,36 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Portfolio – Your Name</title>
-    <meta name="description" content="Personal portfolio of Your Name – projects, experience, and contact." />
+    <title>Portfolio – Khang Phuc Nguyen</title>
+    <meta name="description" content="Personal portfolio of Khang Phuc Nguyen – Data Analyst projects, experience, and contact." />
     <meta name="theme-color" content="#09090b" />
     <!-- Open Graph -->
-    <meta property="og:title" content="Portfolio – Your Name" />
-    <meta property="og:description" content="Projects, experience, skills, and contact." />
+    <meta property="og:title" content="Portfolio – Khang Phuc Nguyen" />
+    <meta property="og:description" content="Data Analyst projects, experience, skills, and contact." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="/og-image.png" />
     <link rel="icon" href="/favicon.ico" />
 
-    <!-- Inter Font -->
+    <!-- Optimized font loading - only essential fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
-    <!-- Handwriting fallback font for splash (in case Mistral isn't available) -->
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet" />
 
-      <!-- Font Awesome -->
-      <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
-    <!-- Sacramento for handwriting intro -->
-    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet" />
+    <!-- Font Awesome - lighter version -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'"/>
 
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-      // Tailwind config (extend, dark mode class)
+      // Simplified Tailwind config
       tailwind.config = {
         darkMode: 'class',
         theme: {
           extend: {
-            fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
+            fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
             colors: {
               brand: {
-                DEFAULT: '#e43c42', // indigo-500
-                50: '#eef2ff',
-                100: '#264653',
-                200: '#287271',
+                DEFAULT: '#e43c42',
                 300: '#2A9D8F',
                 400: '#E9C46A',
                 500: '#DF99A5',
@@ -49,159 +40,100 @@
                 700: '#E43C42',
               },
             },
-            boxShadow: {
-              soft: '0 6px 30px rgba(0,0,0,.12)',
-            },
-            keyframes: {
-              fade: { '0%': { opacity: 0, transform: 'translateY(8px)' }, '100%': { opacity: 1, transform: 'translateY(0)' } },
-              pop: { '0%': { opacity: 0, transform: 'scale(.97)' }, '100%': { opacity: 1, transform: 'scale(1)' } },
-            },
             animation: {
-              fade: 'fade .5s ease-out both',
-              pop: 'pop .25s ease-out both',
+              fade: 'fade .3s ease-out both',
+              pop: 'pop .2s ease-out both',
             },
           },
         },
       };
-      console.log('[Tailwind] Config applied:', tailwind.config);
-      console.log('[Tailwind] Dark mode strategy =', tailwind.config.darkMode);
     </script>
 
     <style>
       :root { color-scheme: light dark; --theme-accent:#9E0059; }
-      /* Theme gradient background: black + accent (#9E0059) */
+
+      /* Simplified mobile-first background */
+      html.dark body {
+        background: linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
+      }
+
+      /* Mobile-optimized backgrounds */
+      @media (min-width: 768px) {
         html.dark body {
           background:
-            radial-gradient(1000px 600px at 80% 10%, color-mix(in oklab, var(--theme-accent) 40%, transparent), transparent 100%),
-            radial-gradient(800px 500px at 20% 120%, color-mix(in oklab, var(--theme-accent) 28%, transparent), transparent 100%),
-            radial-gradient(600px 400px at 0% 100%, color-mix(in oklab, var(--theme-accent) 36%, transparent), transparent 100%),
+            radial-gradient(800px 400px at 80% 10%, color-mix(in oklab, var(--theme-accent) 30%, transparent), transparent 100%),
+            radial-gradient(600px 300px at 20% 120%, color-mix(in oklab, var(--theme-accent) 20%, transparent), transparent 100%),
             linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
-        background-attachment: fixed;
+          background-attachment: fixed;
+        }
       }
-      /* Subtle glass effect utility */
-      .glass { background: color-mix(in oklab, white 6%, transparent); backdrop-filter: saturate(150%) blur(10px); }
-      .glass-dark { background: color-mix(in oklab, black 40%, transparent); }
-      /* Smooth focus ring for a11y */
-      .focus-ring:focus-visible { outline: 2px solid #818cf8; outline-offset: 2px; border-radius: 0.75rem; }
-      /* Hide mobile menu until hydrated to avoid FOUC */
+
+      /* Simplified animations */
+      @keyframes fade { 0% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: translateY(0); } }
+      @keyframes pop { 0% { opacity: 0; transform: scale(.98); } 100% { opacity: 1; transform: scale(1); } }
+
+      /* Reduced name animation for mobile */
+      .name-cycle {
+        color: #9E0059;
+        text-shadow: 0 0 .2em color-mix(in oklab, currentColor 20%, transparent);
+      }
+
+      @media (min-width: 768px) {
+        .name-cycle {
+          position: relative;
+          display: inline-block;
+          animation: name-cycle 15s steps(3, end) infinite, name-pulse 2.6s ease-in-out infinite;
+        }
+        @keyframes name-cycle {
+          0% { color: #9E0059; }
+          33.333% { color: #6C0079; }
+          66.666% { color: #FF8900; }
+          100% { color: #9E0059; }
+        }
+        @keyframes name-pulse {
+          0%, 100% { transform: scale(1); }
+          40% { transform: scale(1.03); }
+          60% { transform: scale(1.01); }
+        }
+      }
+
+      /* Hide mobile menu until hydrated */
       html:not(.js-ready) #mobileMenu { display: none; }
 
-      /* ===== Name color-cycle + bubbles around the name ===== */
-      .name-cycle { position: relative; display: inline-block; color: #9E0059; will-change: color, transform; transform-origin: 50% 60%; text-shadow: 0 0 .35em color-mix(in oklab, currentColor 35%, transparent); animation: name-cycle 15s steps(3, end) infinite, name-pulse 2.6s ease-in-out infinite; }
-      .name-cycle .ch { position: relative; display: inline-block; padding: 0 .02em; transform-origin: 50% 60%; transition: transform .28s ease, filter .28s ease; }
-      .name-cycle .ch.scan-on { transform: scale(1.12); text-shadow: 0 0 .6em color-mix(in oklab, currentColor 40%, transparent); }
-      .name-cycle .ch.scan-on .b i { animation-play-state: running; }
-      @keyframes name-cycle {
-        0% { color: #9E0059; }
-        33.333% { color: #6C0079; }
-        66.666% { color: #FF8900; }
-        100% { color: #9E0059; }
-      }
-      @keyframes name-pulse {
-        0%, 100% { transform: scale(1); }
-        40% { transform: scale(1.06); }
-        60% { transform: scale(1.02); }
-      }
-      .name-cycle .ch .b { position: absolute; pointer-events: none; left: -0.05em; right: -0.05em; bottom: -0.2em; top: 0.3em; mix-blend-mode: screen; }
-      .name-cycle .ch .b i { position: absolute; bottom: 0; background: currentColor; border-radius: 9999px; opacity: .18; transform: translateY(0) scale(1); animation: float-up var(--dur,7s) linear infinite; animation-play-state: paused; }
-      @keyframes float-up {
-        0%   { transform: translateY(40%) scale(.6); opacity: 0; }
-        10%  { opacity: .24; }
-        60%  { opacity: .18; }
-        100% { transform: translateY(-140%) scale(1.2); opacity: 0; }
-      }
-      .name-cycle .ch .b i:nth-child(1){ left:4%;  width:6px;  height:6px;  --dur:7s;  animation-delay:0s; }
-      .name-cycle .ch .b i:nth-child(1){ left:18%; width:8px;  height:8px;  --dur:8s;  animation-delay:1s; }
-      .name-cycle .ch .b i:nth-child(1){ left:30%; width:5px;  height:5px;  --dur:6.5s;animation-delay:1.5s; }
-      .name-cycle .ch .b i:nth-child(1){ left:42%; width:7px;  height:7px;  --dur:7.5s;animation-delay:2s; }
-      .name-cycle .ch .b i:nth-child(1){ left:54%; width:6px;  height:6px;  --dur:9s;  animation-delay:.5s; }
-      .name-cycle .ch .b i:nth-child(1){ left:66%; width:9px;  height:9px;  --dur:10s; animation-delay:1.2s; }
-      .name-cycle .ch .b i:nth-child(1){ left:78%; width:5px;  height:5px;  --dur:6s;  animation-delay:2.6s; }
-      .name-cycle .ch .b i:nth-child(1){ left:12%; width:4px;  height:4px;  --dur:5.5s;animation-delay:3.1s; }
-      .name-cycle .ch .b i:nth-child(1){ left:36%; width:6px;  height:6px;  --dur:7.2s;animation-delay:4s; }
-      .name-cycle .ch .b i:nth-child(1){left:60%; width:5px;  height:5px;  --dur:6.8s;animation-delay:3.7s; }
-      .name-cycle .ch .b i:nth-child(1){left:72%; width:7px;  height:7px;  --dur:8.8s;animation-delay=2.9s; }
-      .name-cycle .ch .b i:nth-child(1){left:88%; width:6px;  height:6px;  --dur:7.9s;animation-delay:1.8s; }
-
+      /* Reduced motion support */
       @media (prefers-reduced-motion: reduce) {
         .name-cycle { animation: none; }
-        .name-cycle .bubbles i { animation: none; opacity: .15; }
+        * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
       }
     </style>
 
     <script>
-      // Theme + menu state (no framework)
+      // Lightweight theme bootstrap
       (function () {
-        console.group('[Init] Theme bootstrap');
-        console.time('[Init] Theme bootstrap time');
         const stored = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        console.log('stored theme =', stored, '| prefersDark =', prefersDark);
         if (stored === 'dark' || (!stored && prefersDark)) {
           document.documentElement.classList.add('dark');
-          console.log('Applied initial dark mode');
-        } else {
-          console.log('Using light mode by default');
         }
         document.documentElement.classList.add('js-ready');
-        console.log('Added .js-ready class to <html>');
-        console.timeEnd('[Init] Theme bootstrap time');
-        console.groupEnd();
       })();
+
+      // Simplified name animation for desktop only
       window.addEventListener('DOMContentLoaded', () => {
-        console.group('[DOMContentLoaded] UI wiring');
-        const btn = document.getElementById('themeToggle');
-        console.log('themeToggle (first) =', btn);
         const heroNameEl = document.getElementById('heroName');
-        console.log('[HeroName] exists =', !!heroNameEl);
-        // Build per-letter spans + bubbles and start left-to-right scan
-        if (heroNameEl) {
-          // If not yet processed, split text into spans
+        if (heroNameEl && window.innerWidth >= 768 && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          // Only add complex animation on desktop
           if (!heroNameEl.querySelector('.ch')) {
             const raw = heroNameEl.textContent || '';
             heroNameEl.textContent = '';
             [...raw].forEach((ch, i) => {
               const s = document.createElement('span');
               s.className = 'ch';
-              s.setAttribute('data-idx', String(i));
-              s.textContent = ch === ' ' ? ' ' : ch;
-              const b = document.createElement('span'); b.className = 'b';
-              for (let k=0;k<12;k++){ b.appendChild(document.createElement('i')); }
-              s.appendChild(b);
+              s.textContent = ch === ' ' ? ' ' : ch;
               heroNameEl.appendChild(s);
             });
-            console.log('[HeroName] Split into letters =', heroNameEl.querySelectorAll('.ch').length);
-          }
-          const letters = Array.from(heroNameEl.querySelectorAll('.ch'));
-          const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-          if (!reduce && letters.length) {
-            const cycleMs = 3200; // full sweep duration across all letters
-            const step = Math.max(80, Math.floor(cycleMs / letters.length));
-            let idx = -1;
-            function advance(){
-              if (idx >= 0) letters[idx].classList.remove('scan-on');
-              idx = (idx + 1) % letters.length;
-              letters[idx].classList.add('scan-on');
-            }
-            advance();
-            setInterval(advance, step);
-            console.log('[HeroName] Scan initialized | letters:', letters.length, '| step(ms):', step, '| cycle(ms):', step * letters.length);
-          } else {
-            console.log('[HeroName] Reduced motion ON or no letters; scan disabled');
           }
         }
-        const themeToggles = document.querySelectorAll('#themeToggle');
-        if (themeToggles.length > 1) {
-          console.warn('[Warn] Found', themeToggles.length, 'elements with id="themeToggle". IDs should be unique. Only the first is wired.');
-        }
-
-        btn?.addEventListener('click', () => {
-          const before = document.documentElement.classList.contains('dark');
-          const isDark = document.documentElement.classList.toggle('dark');
-          localStorage.setItem('theme', isDark ? 'dark' : 'light');
-          console.log('[ThemeToggle] clicked | wasDark =', before, '| nowDark =', isDark, '| stored =', localStorage.getItem('theme'));
-        });
-        console.groupEnd();
       });
     </script>
   
@@ -735,52 +667,75 @@
     </section>
 
       <script>
-        // Filter + counts (badges version)
+        // Lightweight filter system
         (function(){
           const badgesWrap = document.getElementById('skillBadges');
           if(!badgesWrap) return;
           const badges = Array.from(badgesWrap.querySelectorAll('.skill-badge[data-skill]'));
           const filterSec = document.getElementById('projects-filter');
-          const filterTitle = filterSec ? filterSec.querySelector('[data-filter-title]') : null;
           const filterGrid = document.getElementById('projectsFilteredGrid');
           const clearBtn = document.getElementById('clearFilterBtn');
           const featured = document.getElementById('projects');
           const cards = featured ? Array.from(featured.querySelectorAll('.project-card')) : [];
           const skillsMeta = document.getElementById('skillsMeta');
 
-          function listSkills(card){
-            return (card.dataset.skills || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-          }
+          // Simplified skill counting
+          const counts = {};
+          cards.forEach(card => {
+            const skills = (card.dataset.skills || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+            skills.forEach(s => counts[s] = (counts[s] || 0) + 1);
+          });
 
-          const counts = {}; const allSkillsSet = new Set();
-          cards.forEach(card => { listSkills(card).forEach(s => { counts[s]=(counts[s]||0)+1; allSkillsSet.add(s); }); });
           const total = cards.length;
           badges.forEach(btn => {
             const slug = btn.dataset.skill;
             const count = slug === '*' ? total : (counts[slug] || 0);
             const el = btn.querySelector('span.opacity-70');
-            if (el) el.textContent = '('+count+')';
+            if (el) el.textContent = '(' + count + ')';
           });
+
           if (skillsMeta) skillsMeta.textContent = 'Select any skill to filter projects. Total projects: ' + total + '.';
 
-          function setActive(btn){ badges.forEach(b => b.setAttribute('aria-pressed','false')); btn.setAttribute('aria-pressed','true'); }
-          function btnLabel(slug){ const b = badges.find(x=>x.dataset.skill===slug); const t=b?.querySelectorAll('span'); return t&&t[1]?t[1].textContent.trim():slug.toUpperCase(); }
-
-          function renderFiltered(slug){
-            if(!filterSec||!filterGrid) return;
-            if (slug==='*'){ filterSec.classList.add('hidden'); filterGrid.innerHTML=''; return; }
-            const key = String(slug).toLowerCase(); let count=0; filterGrid.innerHTML='';
-            cards.forEach(card=>{ const skills=listSkills(card); if (skills.includes(key)){ filterGrid.appendChild(card.cloneNode(true)); count++; }});
-            if (filterTitle) filterTitle.textContent = 'Projects filtered by ' + btnLabel(slug);
-            filterSec.classList.toggle('hidden', count===0);
-            if (count===0) filterGrid.innerHTML = '<div class="col-span-full text-center text-zinc-400">No projects found for '+btnLabel(slug)+'.</div>';
-            filterSec.scrollIntoView({ behavior:'smooth', block:'start' });
+          function setActive(btn) {
+            badges.forEach(b => b.setAttribute('aria-pressed', 'false'));
+            btn.setAttribute('aria-pressed', 'true');
           }
 
-          badges.forEach(btn => btn.addEventListener('click', () => { setActive(btn); renderFiltered(btn.dataset.skill); }));
+          function renderFiltered(slug) {
+            if (!filterSec || !filterGrid) return;
+            if (slug === '*') {
+              filterSec.classList.add('hidden');
+              return;
+            }
+
+            const key = String(slug).toLowerCase();
+            let count = 0;
+            filterGrid.innerHTML = '';
+
+            cards.forEach(card => {
+              const skills = (card.dataset.skills || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
+              if (skills.includes(key)) {
+                filterGrid.appendChild(card.cloneNode(true));
+                count++;
+              }
+            });
+
+            filterSec.classList.toggle('hidden', count === 0);
+            if (count > 0) {
+              filterSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+          }
+
+          badges.forEach(btn => btn.addEventListener('click', () => {
+            setActive(btn);
+            renderFiltered(btn.dataset.skill);
+          }));
+
           if (clearBtn) clearBtn.addEventListener('click', () => {
-            const allBtn = badges.find(b=>b.dataset.skill==='*') || badges[0];
-            setActive(allBtn); renderFiltered('*'); document.getElementById('projects').scrollIntoView({ behavior:'smooth', block:'start' });
+            const allBtn = badges.find(b => b.dataset.skill === '*') || badges[0];
+            setActive(allBtn);
+            renderFiltered('*');
+            document.getElementById('projects').scrollIntoView({ behavior: 'smooth', block: 'start' });
           });
         })();
       </script>
@@ -788,39 +743,21 @@
 
     <footer id='contact-footer' class="py-10 border-t border-zinc-200/60 dark:border-white/10">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-4">
-        <p>© <span id="year"></span> <span class="name-cycle"> Khang Phuc Nguyen</span>. All rights reserved.</p>
+        <p>© <span id="year"></span> <span class="name-cycle">Khang Phuc Nguyen</span>. All rights reserved.</p>
         <nav class="flex items-center gap-5">
-        <a
-          href="https://github.com/Khangnguyen01"
-          target="_blank"
-          aria-label="GitHub"
-          class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary"
-        >
+        <a href="https://github.com/Khangnguyen01" target="_blank" aria-label="GitHub" class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary">
           <i class="fab fa-github text-lg sm:text-xl" aria-hidden="true"></i>
           <span>GitHub</span>
         </a>
-        <a
-          href="https://www.linkedin.com/in/npkhang0304/"
-          target="_blank"
-          aria-label="LinkedIn"
-          class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary"
-        >
+        <a href="https://www.linkedin.com/in/npkhang0304/" target="_blank" aria-label="LinkedIn" class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary">
           <i class="fab fa-linkedin text-lg sm:text-xl" aria-hidden="true"></i>
           <span>LinkedIn</span>
         </a>
-        <a
-          href="mailto:khangnguyenforwork@outlook.com"
-          aria-label="Email"
-          class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary"
-        >
+        <a href="mailto:khangnguyenforwork@outlook.com" aria-label="Email" class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary">
           <i class="fas fa-envelope text-lg sm:text-xl" aria-hidden="true"></i>
           <span>Email</span>
         </a>
-        <a
-          href="tel:+84889559390"
-          aria-label="Phone"
-          class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary"
-        >
+        <a href="tel:+84889559390" aria-label="Phone" class="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm hover:text-secondary">
           <i class="fas fa-phone text-lg sm:text-xl" aria-hidden="true"></i>
           <span>Phone</span>
         </a>
@@ -828,129 +765,7 @@
       </div>
       <script>
         document.getElementById('year').textContent = new Date().getFullYear();
-        console.log('[Footer] Year text set to', document.getElementById('year').textContent);
-      </script>
-      <!-- Log capture & saver: buffers console logs/errors and lets you download them -->
-      <script>
-        (function(){
-          const MAX = 1000; // ring buffer size
-          const logs = [];
-          const orig = { log: console.log, info: console.info, warn: console.warn, error: console.error, debug: console.debug };
-          function toJSONSafe(v){
-            try {
-              if (v instanceof Error) return { name: v.name, message: v.message, stack: v.stack };
-              if (typeof v === 'string') return v;
-              return JSON.parse(JSON.stringify(v));
-            } catch { return String(v); }
-          }
-          ['log','info','warn','error','debug'].forEach(level => {
-            console[level] = function (...args) {
-              try {
-                logs.push({ ts: new Date().toISOString(), level, args: args.map(toJSONSafe) });
-                if (logs.length > MAX) logs.shift();
-              } catch {}
-              orig[level].apply(console, args);
-            };
-          });
-          window.__logs = logs;
-          window.saveLogs = function(filename='debug-logs.json'){
-            try {
-              const payload = { ts: new Date().toISOString(), ua: navigator.userAgent, url: location.href, logs };
-              const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-              const url = URL.createObjectURL(blob);
-              const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
-            } catch (err) { orig.error('[LogSaver] Failed to save', err); }
-          };
-          // Capture global errors
-          window.addEventListener('error', (e) => { console.error('[window.error]', e.message, e.filename, e.lineno, e.colno, e.error?.stack); });
-          window.addEventListener('unhandledrejection', (e) => { console.error('[unhandledrejection]', e.reason); });
-          // Persist recent logs to localStorage periodically (last 200 entries)
-          setInterval(() => { try { localStorage.setItem('debug:logs', JSON.stringify(logs.slice(-200))); } catch {} }, 5000);
-          // Shortcut: Ctrl/Cmd + Shift + L to download logs
-          window.addEventListener('keydown', (ev) => { if ((ev.ctrlKey || ev.metaKey) && ev.shiftKey && ev.key.toLowerCase() === 'l') { ev.preventDefault(); window.saveLogs(); } });
-          orig.log('[LogCapture] Initialized. Press Ctrl/Cmd+Shift+L to download logs or call saveLogs().');
-        })();
       </script>
     </footer>
-  
-    <script>
-    (function(){
-      const btn = document.getElementById('themeToggleMobile');
-      if(!btn) return;
-      btn.addEventListener('click', function(){
-        const root = document.documentElement;
-        const next = root.classList.contains('dark') ? 'light' : 'dark';
-        root.classList.toggle('dark', next === 'dark');
-        try { localStorage.setItem('theme', next); } catch(e){}
-      });
-    })();
-    </script>
-
-
-
-    <script>
-    (function(){
-      const dotWrap = document.getElementById('skillDots');
-      if(!dotWrap) return;
-      const dots = Array.from(dotWrap.querySelectorAll('.skill-dot[data-skill]'));
-
-      const filterSec = document.getElementById('projects-filter');
-      const filterTitle = filterSec ? filterSec.querySelector('[data-filter-title]') : null;
-      const filterGrid = document.getElementById('projectsFilteredGrid');
-      const clearBtn = document.getElementById('clearFilterBtn');
-
-      const featured = document.getElementById('projects') || document.querySelector('[data-section="projects"]');
-      const cards = featured ? Array.from(featured.querySelectorAll('.project-card')) : [];
-
-      const labels = { sql: 'SQL', python: 'Python', etl: 'ETL', viz: 'Data Viz', ml: 'Machine Learning', '*': 'All' };
-
-      function setActiveDot(target){
-        dots.forEach(d => {
-          d.setAttribute('aria-pressed', String(d === target));
-          d.classList.remove('ring-4','ring-white/60');
-        });
-        target.classList.add('ring-4','ring-white/60');
-      }
-
-      function renderFiltered(skill){
-        if(!filterSec || !filterGrid) return;
-        if (skill === '*') {
-          filterSec.classList.add('hidden');
-          filterGrid.innerHTML = '';
-          return;
-        }
-        const key = String(skill).toLowerCase();
-        let count = 0;
-        filterGrid.innerHTML = '';
-        cards.forEach(card => {
-          const list = (card.dataset.skills || '').toLowerCase().split(',').map(s => s.trim()).filter(Boolean);
-          if (list.includes(key)) {
-            filterGrid.appendChild(card.cloneNode(true));
-            count++;
-          }
-        });
-        if (filterTitle) filterTitle.textContent = 'Projects filtered by ' + (labels[key] || key.toUpperCase());
-        filterSec.classList.toggle('hidden', count === 0);
-        if (count === 0) {
-          filterGrid.innerHTML = '<div class="col-span-full text-center text-zinc-400">No projects found for ' + (labels[key] || key.toUpperCase()) + '.</div>';
-        }
-        filterSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-
-      dots.forEach(dot => {
-        dot.addEventListener('click', () => {
-          setActiveDot(dot);
-          renderFiltered(dot.dataset.skill);
-        });
-      });
-
-      if (clearBtn) clearBtn.addEventListener('click', () => {
-        const allDot = dots.find(d => d.dataset.skill === '*') || dots[0];
-        setActiveDot(allDot);
-        renderFiltered('*');
-        (document.getElementById('projects') || document.body).scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    })();
-    </script>
   </body>
 </html>
