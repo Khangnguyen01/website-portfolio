@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Portfolio – Khang Phuc Nguyen</title>
+    <title>Portfolio – Your Name</title>
     <meta name="description" content="Personal portfolio of Your Name – projects, experience, and contact." />
     <meta name="theme-color" content="#09090b" />
     <!-- Open Graph -->
@@ -13,19 +13,39 @@
     <meta property="og:image" content="/og-image.png" />
     <link rel="icon" href="/favicon.ico" />
 
-    <!-- Inter Font -->
+    <!-- Device Detection Script -->
+    <script>
+      // Detect mobile device early to optimize loading
+      (function() {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        document.documentElement.classList.add(isMobile ? 'is-mobile' : 'is-desktop');
+        window.isMobileDevice = isMobile;
+      })();
+    </script>
+
+    <!-- Conditional font loading - lighter for mobile -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
-    <!-- Handwriting fallback font for splash (in case Mistral isn't available) -->
-    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" />
 
-      <!-- Font Awesome -->
-      <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+    <!-- Desktop-only fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet" class="desktop-only" />
+    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet" class="desktop-only" />
 
-    <!-- Sacramento for handwriting intro -->
-    <link href="https://fonts.googleapis.com/css2?family=Sacramento&display=swap" rel="stylesheet" />
+    <!-- Conditional Font Awesome loading -->
+    <script>
+      if (!window.isMobileDevice) {
+        const faScript = document.createElement('script');
+        faScript.src = 'https://kit.fontawesome.com/a076d05399.js';
+        faScript.crossOrigin = 'anonymous';
+        document.head.appendChild(faScript);
+
+        const faLink = document.createElement('link');
+        faLink.rel = 'stylesheet';
+        faLink.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+        document.head.appendChild(faLink);
+      }
+    </script>
 
     <!-- Tailwind CSS (CDN) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -38,7 +58,7 @@
             fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'] },
             colors: {
               brand: {
-                DEFAULT: '#e43c42', // indigo-500
+                DEFAULT: '#e43c42',
                 50: '#eef2ff',
                 100: '#264653',
                 200: '#287271',
@@ -63,72 +83,88 @@
           },
         },
       };
-      console.log('[Tailwind] Config applied:', tailwind.config);
-      console.log('[Tailwind] Dark mode strategy =', tailwind.config.darkMode);
     </script>
 
     <style>
       :root { color-scheme: light dark; --theme-accent:#9E0059; }
+
+      /* Hide desktop-only elements on mobile */
+      .is-mobile .desktop-only { display: none !important; }
+
       /* Theme gradient background: black + accent (#9E0059) */
-        html.dark body {
-          background:
-            radial-gradient(1000px 600px at 80% 10%, color-mix(in oklab, var(--theme-accent) 40%, transparent), transparent 100%),
-            radial-gradient(800px 500px at 20% 120%, color-mix(in oklab, var(--theme-accent) 28%, transparent), transparent 100%),
-            radial-gradient(600px 400px at 0% 100%, color-mix(in oklab, var(--theme-accent) 36%, transparent), transparent 100%),
-            linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
+      html.dark body {
+        background:
+          radial-gradient(1000px 600px at 80% 10%, color-mix(in oklab, var(--theme-accent) 40%, transparent), transparent 100%),
+          radial-gradient(800px 500px at 20% 120%, color-mix(in oklab, var(--theme-accent) 28%, transparent), transparent 100%),
+          radial-gradient(600px 400px at 0% 100%, color-mix(in oklab, var(--theme-accent) 36%, transparent), transparent 100%),
+          linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
         background-attachment: fixed;
       }
+
+      /* Mobile optimized background - match desktop gradient but optimized for mobile */
+      .is-mobile body {
+        background:
+          radial-gradient(600px 400px at 80% 10%, color-mix(in oklab, var(--theme-accent) 30%, transparent), transparent 100%),
+          radial-gradient(500px 300px at 20% 120%, color-mix(in oklab, var(--theme-accent) 20%, transparent), transparent 100%),
+          radial-gradient(400px 250px at 0% 100%, color-mix(in oklab, var(--theme-accent) 25%, transparent), transparent 100%),
+          linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
+        background-attachment: scroll;
+      }
+
+      .is-mobile html.dark body {
+        background:
+          radial-gradient(600px 400px at 80% 10%, color-mix(in oklab, var(--theme-accent) 30%, transparent), transparent 100%),
+          radial-gradient(500px 300px at 20% 120%, color-mix(in oklab, var(--theme-accent) 20%, transparent), transparent 100%),
+          radial-gradient(400px 250px at 0% 100%, color-mix(in oklab, var(--theme-accent) 25%, transparent), transparent 100%),
+          linear-gradient(180deg, #000 0%, #0a0a0a 50%, #000 100%);
+        background-attachment: scroll;
+      }
+
       /* Subtle glass effect utility */
       .glass { background: color-mix(in oklab, white 6%, transparent); backdrop-filter: saturate(150%) blur(10px); }
       .glass-dark { background: color-mix(in oklab, black 40%, transparent); }
+
+      /* Mobile glass effects - lighter */
+      .is-mobile .glass { background: color-mix(in oklab, white 8%, transparent); backdrop-filter: blur(8px); }
+      .is-mobile .glass-dark { background: color-mix(in oklab, black 60%, transparent); }
+
       /* Smooth focus ring for a11y */
       .focus-ring:focus-visible { outline: 2px solid #818cf8; outline-offset: 2px; border-radius: 0.75rem; }
       /* Hide mobile menu until hydrated to avoid FOUC */
       html:not(.js-ready) #mobileMenu { display: none; }
 
-      /* === Hello splash (black bg) with handwriting reveal === */
-      #helloSplash {
-        background:
-          radial-gradient(1200px 800px at 50% -10%, color-mix(in oklab, var(--theme-accent) 22%, transparent), transparent 60%),
-          #000;
-      }
-      #helloSplash[hidden] { display:none; }
-
-      /* The white-filled text underneath */
-      .hello-fill {
-        fill: #fff; /* solid white body */
-        filter: drop-shadow(0 0 10px rgba(255,255,255,.18)); /* subtle glow */
-      }
-      /* A light gray ghost for the yet-to-be-written portion (masked inversely) */
-      .hello-ghost { fill: #9ca3af; opacity: .35; }
-
-      /* The stroke that "writes" the text, used inside masks */
-      .hello-reveal {
-        fill: none;
-        stroke-linecap: round;
-        stroke-linejoin: round;
-        stroke-width: 18;             /* thickness of the writing brush */
-        stroke-dasharray: 6000;       /* big number to cover glyph outlines */
-        stroke-dashoffset: 6000;
-        animation: hello-draw 5s ease-in-out forwards; /* handwriting duration = 5s */
-      }
-      @keyframes hello-draw { to { stroke-dashoffset: 0; } }
-
-      /* Fade the overlay out when we add .fade-out */
-      .fade-out { animation: splash-fade .7s ease forwards; }
-      @keyframes splash-fade { to { opacity: 0; visibility: hidden; } }
-
-      /* Respect reduced motion */
-      @media (prefers-reduced-motion: reduce) {
-        .hello-reveal { animation: none; stroke-dashoffset: 0; }
-        .fade-out { animation-duration: .2s; }
+      /* ===== Desktop-only Name color-cycle + bubbles around the name ===== */
+      .is-desktop .name-cycle {
+        position: relative;
+        display: inline-block;
+        color: #9E0059;
+        will-change: color, transform;
+        transform-origin: 50% 60%;
+        text-shadow: 0 0 .35em color-mix(in oklab, currentColor 35%, transparent);
+        animation: name-cycle 15s steps(3, end) infinite, name-pulse 2.6s ease-in-out infinite;
       }
 
-      /* ===== Name color-cycle + bubbles around the name ===== */
-      .name-cycle { position: relative; display: inline-block; color: #9E0059; will-change: color, transform; transform-origin: 50% 60%; text-shadow: 0 0 .35em color-mix(in oklab, currentColor 35%, transparent); animation: name-cycle 15s steps(3, end) infinite, name-pulse 2.6s ease-in-out infinite; }
-      .name-cycle .ch { position: relative; display: inline-block; padding: 0 .02em; transform-origin: 50% 60%; transition: transform .28s ease, filter .28s ease; }
-      .name-cycle .ch.scan-on { transform: scale(1.12); text-shadow: 0 0 .6em color-mix(in oklab, currentColor 40%, transparent); }
-      .name-cycle .ch.scan-on .b i { animation-play-state: running; }
+      .is-desktop .name-cycle .ch {
+        position: relative;
+        display: inline-block;
+        padding: 0 .02em;
+        transform-origin: 50% 60%;
+        transition: transform .28s ease, filter .28s ease;
+      }
+
+      .is-desktop .name-cycle .ch.scan-on {
+        transform: scale(1.12);
+        text-shadow: 0 0 .6em color-mix(in oklab, currentColor 40%, transparent);
+      }
+
+      .is-desktop .name-cycle .ch.scan-on .b i { animation-play-state: running; }
+
+      /* Mobile-only simple name styling */
+      .is-mobile .name-cycle {
+        color: #9E0059;
+        font-weight: 800;
+      }
+
       @keyframes name-cycle {
         0% { color: #9E0059; }
         33.333% { color: #6C0079; }
@@ -140,60 +176,107 @@
         40% { transform: scale(1.06); }
         60% { transform: scale(1.02); }
       }
-      .name-cycle .ch .b { position: absolute; pointer-events: none; left: -0.05em; right: -0.05em; bottom: -0.2em; top: 0.3em; mix-blend-mode: screen; }
-      .name-cycle .ch .b i { position: absolute; bottom: 0; background: currentColor; border-radius: 9999px; opacity: .18; transform: translateY(0) scale(1); animation: float-up var(--dur,7s) linear infinite; animation-play-state: paused; }
+
+      .is-desktop .name-cycle .ch .b {
+        position: absolute;
+        pointer-events: none;
+        left: -0.05em;
+        right: -0.05em;
+        bottom: -0.2em;
+        top: 0.3em;
+        mix-blend-mode: screen;
+      }
+
+      .is-desktop .name-cycle .ch .b i {
+        position: absolute;
+        bottom: 0;
+        background: currentColor;
+        border-radius: 9999px;
+        opacity: .18;
+        transform: translateY(0) scale(1);
+        animation: float-up var(--dur,7s) linear infinite;
+        animation-play-state: paused;
+      }
+
       @keyframes float-up {
         0%   { transform: translateY(40%) scale(.6); opacity: 0; }
         10%  { opacity: .24; }
         60%  { opacity: .18; }
         100% { transform: translateY(-140%) scale(1.2); opacity: 0; }
       }
-      .name-cycle .ch .b i:nth-child(1){ left:4%;  width:6px;  height:6px;  --dur:7s;  animation-delay:0s; }
-      .name-cycle .ch .b i:nth-child(1){ left:18%; width:8px;  height:8px;  --dur:8s;  animation-delay:1s; }
-      .name-cycle .ch .b i:nth-child(1){ left:30%; width:5px;  height:5px;  --dur:6.5s;animation-delay:1.5s; }
-      .name-cycle .ch .b i:nth-child(1){ left:42%; width:7px;  height:7px;  --dur:7.5s;animation-delay:2s; }
-      .name-cycle .ch .b i:nth-child(1){ left:54%; width:6px;  height:6px;  --dur:9s;  animation-delay:.5s; }
-      .name-cycle .ch .b i:nth-child(1){ left:66%; width:9px;  height:9px;  --dur:10s; animation-delay:1.2s; }
-      .name-cycle .ch .b i:nth-child(1){ left:78%; width:5px;  height:5px;  --dur:6s;  animation-delay:2.6s; }
-      .name-cycle .ch .b i:nth-child(1){ left:12%; width:4px;  height:4px;  --dur:5.5s;animation-delay:3.1s; }
-      .name-cycle .ch .b i:nth-child(1){ left:36%; width:6px;  height:6px;  --dur:7.2s;animation-delay:4s; }
-      .name-cycle .ch .b i:nth-child(1){left:60%; width:5px;  height:5px;  --dur:6.8s;animation-delay:3.7s; }
-      .name-cycle .ch .b i:nth-child(1){left:72%; width:7px;  height:7px;  --dur:8.8s;animation-delay:2.9s; }
-      .name-cycle .ch .b i:nth-child(1){left:88%; width:6px;  height:6px;  --dur:7.9s;animation-delay:1.8s; }
+
+      .is-desktop .name-cycle .ch .b i:nth-child(1){ left:4%;  width:6px;  height:6px;  --dur:7s;  animation-delay:0s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(2){ left:18%; width:8px;  height:8px;  --dur:8s;  animation-delay:1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(3){ left:30%; width:5px;  height:5px;  --dur:6.5s;animation-delay:1.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(4){ left:42%; width:7px;  height:7px;  --dur:7.5s;animation-delay:2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(5){ left:54%; width:6px;  height:6px;  --dur:9s;  animation-delay:.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(6){ left:66%; width:9px;  height:9px;  --dur:10s; animation-delay:1.2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(7){ left:78%; width:5px;  height:5px;  --dur:6s;  animation-delay:2.6s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(8){ left:12%; width:4px;  height:4px;  --dur:5.5s;animation-delay:3.1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(9){ left:36%; width:6px;  height:6px;  --dur:7.2s;animation-delay:4s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(10){left:60%; width:5px;  height:5px;  --dur:6.8s;animation-delay:3.7s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(11){left:72%; width:7px;  height:7px;  --dur:8.8s;animation-delay:2.9s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(12){left:88%; width:6px;  height:6px;  --dur:7.9s;animation-delay:1.8s; }
 
       @media (prefers-reduced-motion: reduce) {
         .name-cycle { animation: none; }
         .name-cycle .bubbles i { animation: none; opacity: .15; }
+      }
+
+      /* Mobile performance optimizations */
+      .is-mobile * {
+        will-change: auto !important; /* Disable will-change on mobile for better performance */
+      }
+
+      .is-mobile .animate-fade, .is-mobile .animate-pop {
+        animation: none; /* Disable complex animations on mobile */
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Mobile text color overrides for better visibility */
+      .is-mobile #hero h1,
+      .is-mobile #hero p,
+      .is-mobile #about h2,
+      .is-mobile #about p {
+        color: white !important;
+      }
+
+      /* Available for work badge should match name color on mobile */
+      .is-mobile #hero p.inline-flex {
+        color: #9E0059 !important;
+      }
+
+      /* Contact Me button text should be white on mobile */
+      .is-mobile #hero a[href="#contact-footer"] {
+        color: white !important;
+      }
+
+      /* Ensure text remains readable on mobile gradient background */
+      .is-mobile .text-zinc-600,
+      .is-mobile .text-zinc-700,
+      .is-mobile .dark\:text-zinc-300 {
+        color: white !important;
       }
     </style>
 
     <script>
       // Theme + menu state (no framework)
       (function () {
-        console.group('[Init] Theme bootstrap');
-        console.time('[Init] Theme bootstrap time');
         const stored = localStorage.getItem('theme');
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        console.log('stored theme =', stored, '| prefersDark =', prefersDark);
         if (stored === 'dark' || (!stored && prefersDark)) {
           document.documentElement.classList.add('dark');
-          console.log('Applied initial dark mode');
-        } else {
-          console.log('Using light mode by default');
         }
         document.documentElement.classList.add('js-ready');
-        console.log('Added .js-ready class to <html>');
-        console.timeEnd('[Init] Theme bootstrap time');
-        console.groupEnd();
       })();
+
       window.addEventListener('DOMContentLoaded', () => {
-        console.group('[DOMContentLoaded] UI wiring');
         const btn = document.getElementById('themeToggle');
-        console.log('themeToggle (first) =', btn);
         const heroNameEl = document.getElementById('heroName');
-        console.log('[HeroName] exists =', !!heroNameEl);
-        // Build per-letter spans + bubbles and start left-to-right scan
-        if (heroNameEl) {
+
+        // Only apply complex name effects on desktop
+        if (heroNameEl && !window.isMobileDevice) {
           // If not yet processed, split text into spans
           if (!heroNameEl.querySelector('.ch')) {
             const raw = heroNameEl.textContent || '';
@@ -202,18 +285,17 @@
               const s = document.createElement('span');
               s.className = 'ch';
               s.setAttribute('data-idx', String(i));
-              s.textContent = ch === ' ' ? ' ' : ch;
+              s.textContent = ch === ' ' ? ' ' : ch;
               const b = document.createElement('span'); b.className = 'b';
               for (let k=0;k<12;k++){ b.appendChild(document.createElement('i')); }
               s.appendChild(b);
               heroNameEl.appendChild(s);
             });
-            console.log('[HeroName] Split into letters =', heroNameEl.querySelectorAll('.ch').length);
           }
           const letters = Array.from(heroNameEl.querySelectorAll('.ch'));
           const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
           if (!reduce && letters.length) {
-            const cycleMs = 3200; // full sweep duration across all letters
+            const cycleMs = 3200;
             const step = Math.max(80, Math.floor(cycleMs / letters.length));
             let idx = -1;
             function advance(){
@@ -223,40 +305,13 @@
             }
             advance();
             setInterval(advance, step);
-            console.log('[HeroName] Scan initialized | letters:', letters.length, '| step(ms):', step, '| cycle(ms):', step * letters.length);
-          } else {
-            console.log('[HeroName] Reduced motion ON or no letters; scan disabled');
           }
-        }
-        const themeToggles = document.querySelectorAll('#themeToggle');
-        if (themeToggles.length > 1) {
-          console.warn('[Warn] Found', themeToggles.length, 'elements with id="themeToggle". IDs should be unique. Only the first is wired.');
         }
 
         btn?.addEventListener('click', () => {
-          const before = document.documentElement.classList.contains('dark');
           const isDark = document.documentElement.classList.toggle('dark');
           localStorage.setItem('theme', isDark ? 'dark' : 'light');
-          console.log('[ThemeToggle] clicked | wasDark =', before, '| nowDark =', isDark, '| stored =', localStorage.getItem('theme'));
         });
-        console.groupEnd();
-      });
-
-      // Handle the hello splash lifecycle (CSS-driven handwriting); auto hide after ~10s total
-      window.addEventListener('load', () => {
-        const splash = document.getElementById('helloSplash');
-        if (!splash) return;
-        const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const totalMs = prefersReduced ? 1000 : 3000; // splash lifetime
-        console.log('[HelloSplash] Loaded (text-mask). prefersReduced =', prefersReduced, '| will hide in', totalMs, 'ms');
-        setTimeout(() => {
-          splash.classList.add('fade-out');
-          console.log('[HelloSplash] Fading out...');
-          splash.addEventListener('animationend', () => {
-            splash.remove();
-            console.log('[HelloSplash] Removed from DOM.');
-          }, { once: true });
-        }, totalMs);
       });
     </script>
   
@@ -270,40 +325,6 @@
 </head>
 
   <body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 antialiased">
-    <!-- Fullscreen HELLO splash overlay -->
-    <div id="helloSplash" class="fixed inset-0 z-[9999] grid place-items-center select-none">
-      <!-- Text-based handwriting reveal so you can edit content directly inside <text id="helloText"> -->
-      <svg class="w-[84vw] max-w-[1200px]" viewBox="0 0 1600 400" role="img" aria-label="Welcome to My Profile">
-        <defs>
-          <!-- Soft glow to keep stroke pleasant on black bg -->
-          <filter id="appleGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="3" result="b"/>
-            <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-
-          <!-- EDIT HERE: change the visible text content -->
-          <text id="helloText" x="50%" y="55%" text-anchor="middle" dominant-baseline="middle"
-                style="font: normal 150px 'Sacramento', cursive; letter-spacing: 0px;">Welcome to My Profile</text>
-
-          <!-- Mask uses the same text as a white stroke that draws over time to reveal the fill -->
-          <mask id="applePenMask">
-            <rect width="100%" height="100%" fill="#000"/>
-            <style>
-              .pen { fill: none; stroke: #fff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 20; }
-              .draw { stroke-dasharray: 2000; stroke-dashoffset: 2000; animation: draw 5s cubic-bezier(.25,.1,.25,1) forwards; }
-              @keyframes draw { to { stroke-dashoffset: 0; } }
-              @media (prefers-reduced-motion: reduce) { .draw { animation: none; stroke-dashoffset: 0; } }
-            </style>
-            <!-- Same text, but as a stroke that animates -->
-            <use href="#helloText" class="pen draw" />
-          </mask>
-        </defs>
-
-        <!-- White filled text; mask reveals it along the handwriting animation -->
-        <use href="#helloText" fill="#fff" filter="url(#appleGlow)" mask="url(#applePenMask)" />
-      </svg>
-    </div>
-
     <a href="#main" class="sr-only focus:not-sr-only focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-transparent rounded px-3 py-2 absolute left-3 top-3 bg-white/90 dark:bg-zinc-900/90 z-[60]">Skip to content</a>
 
     <!-- Header / Nav (glass, centered, hidden by default; shows on scroll down) -->
@@ -330,12 +351,6 @@
               <li><a class="hover:text-indigo-600 dark:hover:text-indigo-400" href="#experience">Experience</a></li>
               <li><a class="hover:text-indigo-600 dark:hover:text-indigo-400" href="#education">Education</a></li>
               <li><a class="hover:text-indigo-600 dark:hover:text-indigo-400" href="#contact-footer">Contact</a></li>
-              <li>
-<!--                <button id="themeToggle" class="w-9 h-9 rounded-xl grid place-items-center bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" aria-label="Toggle theme">-->
-<!--                  <svg class="dark:hidden w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.25a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V4a.75.75 0 0 1 .75-.75Zm0 14a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5Zm8.75-4.25a.75.75 0 0 1-.75.75h-2a.75.75 0 0 1 0-1.5h2a.75.75 0 0 1 .75.75ZM6 13.75a.75.75 0 0 1-.75.75h-2a.75.75 0 0 1 0-1.5h2a.75.75 0 0 1 .75.75Zm12.03-7.78a.75.75 0 0 1 0 1.06l-1.42 1.42a.75.75 0 0 1-1.06-1.06l1.42-1.42a.75.75 0 0 1 1.06 0ZM6.45 17.55a.75.75 0 0 1-1.06 0l-1.42-1.42a.75.75 0 0 1 1.06-1.06l1.42 1.42a.75.75 0 0 1 0 1.06Zm12.1 0-1.42-1.42a.75.75 0 1 1 1.06-1.06l1.42 1.42a.75.75 0 0 1-1.06 1.06ZM6.45 6.45 5.03 5.03A.75.75 0 0 1 6.09 4l1.42 1.42A.75.75 0 1 1 6.45 6.45Z"/></svg>-->
-<!--                  <svg class="hidden dark:block w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>-->
-<!--                </button>-->
-              </li>
             </ul>
           </nav>
 
@@ -349,10 +364,6 @@
               <li><a class="block px-3 py-2 rounded-lg hover:bg-zinc-100/80 dark:hover:bg-zinc-800/80" href="#education">Education</a></li>
               <li class="flex items-center justify-between px-3 py-2">
                 <a class="rounded-lg" href="#contact-footer">Contact</a>
-<!--                <button id="themeToggleMobile" class="w-9 h-9 rounded-xl grid place-items-center bg-zinc-100 dark:bg-zinc-800 hover:bg-zinc-200 dark:hover:bg-zinc-700 transition-colors" aria-label="Toggle theme">-->
-<!--                  <svg class="dark:hidden w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.25a.75.75 0 0 1 .75.75v2a.75.75 0 0 1-1.5 0V4a.75.75 0 0 1 .75-.75Zm0 14a4.25 4.25 0 1 0 0-8.5 4.25 4.25 0 0 0 0 8.5Zm8.75-4.25a.75.75 0 0 1-.75.75h-2a.75.75 0 0 1 0-1.5h2a.75.75 0 0 1 .75.75ZM6 13.75a.75.75 0 0 1-.75.75h-2a.75.75 0 0 1 0-1.5h2a.75.75 0 0 1 .75.75Zm12.03-7.78a.75.75 0 0 1 0 1.06l-1.42 1.42a.75.75 0 0 1-1.06-1.06l1.42-1.42a.75.75 0 0 1 1.06 0ZM6.45 17.55a.75.75 0 0 1-1.06 0l-1.42-1.42a.75.75 0 0 1 1.06-1.06l1.42 1.42a.75.75 0 0 1 0 1.06Zm12.1 0-1.42-1.42a.75.75 0 1 1 1.06-1.06l1.42 1.42a.75.75 0 0 1-1.06 1.06ZM6.45 6.45 5.03 5.03A.75.75 0 0 1 6.09 4l1.42 1.42A.75.75 0 1 1 6.45 6.45Z"/></svg>-->
-<!--                  <svg class="hidden dark:block w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/></svg>-->
-<!--                </button>-->
               </li>
             </ul>
           </div>
@@ -361,7 +372,7 @@
     </header>
 
     <script>
-    /* Header reveal on scroll + mobile menu; robust on mobile. */
+    /* Header reveal on scroll + mobile menu; optimized for mobile performance */
     (function(){
       const shell = document.getElementById('siteHeaderShell');
       const menu  = document.getElementById('mobileMenu');
@@ -369,11 +380,12 @@
       if(!shell) return;
 
       let lastY = window.scrollY || 0;
-      const TH = 8;        // scroll delta threshold
+      const TH = window.isMobileDevice ? 12 : 8; // Higher threshold for mobile
       let menuOpen = false;
+      let ticking = false;
 
       function hideHeader(){
-        if (menuOpen) return; // giữ header khi menu đang mở
+        if (menuOpen) return;
         shell.classList.remove('opacity-100','translate-y-0');
         shell.classList.add('opacity-0','-translate-y-3','pointer-events-none');
       }
@@ -383,21 +395,26 @@
       }
 
       function onScroll(){
-        const y = window.scrollY || 0;
-        const d = y - lastY;
-        if (y < 6) {
-          hideHeader();
-        } else if (d > TH) {
-          // scroll xuống -> hiện
-          showHeader();
-        } else if (d < -TH) {
-          // scroll lên -> ẩn (trừ khi đang mở menu)
-          hideHeader();
+        if (!ticking) {
+          requestAnimationFrame(() => {
+            const y = window.scrollY || 0;
+            const d = y - lastY;
+            if (y < 6) {
+              hideHeader();
+            } else if (d > TH) {
+              showHeader();
+            } else if (d < -TH) {
+              hideHeader();
+            }
+            lastY = y;
+            ticking = false;
+          });
+          ticking = true;
         }
-        lastY = y;
       }
+
       window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll(); // set trạng thái đầu
+      onScroll();
 
       // Toggle mobile menu
       if (btn && menu){
@@ -406,10 +423,9 @@
           const nowOpen = !menu.classList.contains('hidden');
           menuOpen = nowOpen;
           btn.setAttribute('aria-expanded', String(nowOpen));
-          showHeader(); // đảm bảo header hiện khi mở menu
+          showHeader();
         });
 
-        // Đóng menu khi bấm link
         menu.querySelectorAll('a[href^="#"]').forEach(a => {
           a.addEventListener('click', () => {
             menu.classList.add('hidden');
@@ -419,7 +435,7 @@
         });
       }
 
-      // Theme toggles (desktop + mobile)
+      // Theme toggles
       const root = document.documentElement;
       const KEY = 'theme';
       const saved = localStorage.getItem(KEY);
@@ -435,16 +451,15 @@
     })();
     </script>
 
-
     <main id="main" class="relative">
       <!-- Hero -->
       <section id="hero" class="relative overflow-hidden">
         <div class="absolute inset-0 -z-10">
-          <div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[80vw] max-w-5xl h-[80vw] max-h-[40rem] rounded-full blur-3xl opacity-30 bg-gradient-to-br from-brand-300 to-brand-600 dark:opacity-20"></div>
+          <div class="desktop-only absolute -top-40 left-1/2 -translate-x-1/2 w-[80vw] max-w-5xl h-[80vw] max-h-[40rem] rounded-full blur-3xl opacity-30 bg-gradient-to-br from-brand-300 to-brand-600 dark:opacity-20"></div>
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-28">
           <div class="grid lg:grid-cols-2 gap-10 items-center">
-            <div class="space-y-6 animate-fade">
+            <div class="space-y-6 is-desktop:animate-fade">
               <p class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-700/20 px-3 py-1 rounded-full w-max">
                 <span class="w-2 h-2 rounded-full bg-brand-500"></span> Available for work
               </p>
@@ -465,10 +480,10 @@
                 </a>
               </div>
             </div>
-            <div class="lg:justify-self-end animate-pop">
+            <div class="lg:justify-self-end is-desktop:animate-pop">
               <div class="relative p-2 rounded-[2rem] bg-gradient-to-tr from-brand-400/20 to-transparent">
                 <div class="rounded-[1.5rem] p-6 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-soft border border-zinc-200/70 dark:border-white/10">
-                  <img src="https://i.ibb.co/PGSdyWkZ/IMG-8518.jpg" alt="Working at a laptop" class="rounded-xl object-cover object-top aspect-[4/4] w-full" />
+                  <img src="https://i.ibb.co/PGSdyWkZ/IMG-8518.jpg" alt="Working at a laptop" class="rounded-xl object-cover object-top aspect-[4/4] w-full" loading="lazy" />
                   <div class="mt-4 flex items-center justify-between gap-4">
                     <div>
                       <p class="text-xs text-zinc-500 dark:text-zinc-400">Current role</p>
@@ -491,18 +506,18 @@
       <!-- About -->
       <section id="about" class="py-20 sm:py-24">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 class="text-center text-3xl sm:text-4xl font-extrabold mb-6">About Me</h2>
+          <h2 class="text-center text-3xl sm:text-4xl font-extrabold mb-6 text-white">About Me</h2>
           <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
           <p class="text-zinc-700 text-justify dark:text-zinc-300 leading-relaxed max-w-6xl">
-            A passionate data alchemist who transforms raw numbers into strategic narratives, I thrive at the crossroads of curiosity and rigor. With a mastery of SQL’s intricate joins and window functions, I unearth hidden patterns from sprawling datasets. Python is my canvas: I wield Pandas and NumPy to sculpt data pipelines, apply scikit-learn to craft predictive models, and harness Matplotlib to paint compelling visual stories.
+            A passionate data alchemist who transforms raw numbers into strategic narratives, I thrive at the crossroads of curiosity and rigor. With a mastery of SQL's intricate joins and window functions, I unearth hidden patterns from sprawling datasets. Python is my canvas: I wield Pandas and NumPy to sculpt data pipelines, apply scikit-learn to craft predictive models, and harness Matplotlib to paint compelling visual stories.
             <br /><br />
-            Every analysis I undertake begins with a question—Why did this trend emerge? Which segment is driving growth?—and ends with clear, actionable recommendations. I excel at designing experiments, from A/B tests that optimize user experience to cohort analyses that deepen our understanding of customer behavior. Whether I’m modeling lifetime value to guide marketing spend or building dashboards in Tableau and Power BI to monitor real-time performance, my focus is always on bridging data and decision-making.
+            Every analysis I undertake begins with a question—Why did this trend emerge? Which segment is driving growth?—and ends with clear, actionable recommendations. I excel at designing experiments, from A/B tests that optimize user experience to cohort analyses that deepen our understanding of customer behavior. Whether I'm modeling lifetime value to guide marketing spend or building dashboards in Tableau and Power BI to monitor real-time performance, my focus is always on bridging data and decision-making.
             <br /><br />
             Collaboration is at the heart of my work. I partner with product managers to define key performance indicators, work alongside engineers to automate ETL workflows, and coach stakeholders on data literacy so that insights spur meaningful action. Adaptable and ever-eager to learn, I stay abreast of emerging tools—like Snowflake, dbt, or advanced machine-learning frameworks—and integrate them to streamline processes and enhance predictive power.
             <br /><br />
-            Ultimately, I’m driven by impact: empowering teams to make smarter choices, uncovering opportunities in the noise of big data, and crafting narratives that inspire confidence. If you seek a data analyst who combines technical prowess with strategic vision—and a dash of creative flair—you’ve found your analytical storyteller.
+            Ultimately, I'm driven by impact: empowering teams to make smarter choices, uncovering opportunities in the noise of big data, and crafting narratives that inspire confidence. If you seek a data analyst who combines technical prowess with strategic vision—and a dash of creative flair—you've found your analytical storyteller.
             <br /><br />
-              When I’m not immersed in data, you can find me exploring the latest tech trends, experimenting with new recipes, enjoying a history book or playing badminton, football. I believe in lifelong learning and am always looking for ways to expand my skill set and knowledge base.
+              When I'm not immersed in data, you can find me exploring the latest tech trends, experimenting with new recipes, enjoying a history book or playing badminton, football. I believe in lifelong learning and am always looking for ways to expand my skill set and knowledge base.
           </p>
         </div>
       </section>
