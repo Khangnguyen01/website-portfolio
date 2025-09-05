@@ -258,6 +258,780 @@
       .is-mobile .dark\:text-zinc-300 {
         color: white !important;
       }
+
+      /* Desktop-only scroll animations */
+      .is-desktop .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+
+      .is-desktop .scroll-animate.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .is-desktop .scroll-animate.delay-1 {
+        transition-delay: 0.1s;
+      }
+
+      .is-desktop .scroll-animate.delay-2 {
+        transition-delay: 0.2s;
+      }
+
+      .is-desktop .scroll-animate.delay-3 {
+        transition-delay: 0.3s;
+      }
+
+      /* Modern blog-style project cards */
+      .modern-project-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+      }
+
+      .modern-project-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        border-color: rgba(255,255,255,0.2);
+      }
+
+      .modern-project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #9E0059, #6C0079, #FF8900);
+      }
+
+      .project-meta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.9);
+      }
+
+      .project-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        position: relative;
+        display: inline-block;
+      }
+
+      .project-title::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #9E0059, #FF8900);
+        transition: width 0.3s ease;
+      }
+
+      .project-title:hover::after {
+        width: 100%;
+      }
+
+      .project-description {
+        color: rgba(255,255,255,0.8);
+        line-height: 1.6;
+        margin: 1rem 0;
+      }
+
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .tech-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.625rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.9);
+        transition: all 0.2s ease;
+      }
+
+      .tech-badge:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+      }
+
+      /* Mobile optimizations */
+      .is-mobile .modern-project-card {
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .is-mobile .modern-project-card:hover {
+        transform: none !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+      }
+
+      /* ===== Desktop-only Name color-cycle + bubbles around the name ===== */
+      .is-desktop .name-cycle {
+        position: relative;
+        display: inline-block;
+        color: #9E0059;
+        will-change: color, transform;
+        transform-origin: 50% 60%;
+        text-shadow: 0 0 .35em color-mix(in oklab, currentColor 35%, transparent);
+        animation: name-cycle 15s steps(3, end) infinite, name-pulse 2.6s ease-in-out infinite;
+      }
+
+      .is-desktop .name-cycle .ch {
+        position: relative;
+        display: inline-block;
+        padding: 0 .02em;
+        transform-origin: 50% 60%;
+        transition: transform .28s ease, filter .28s ease;
+      }
+
+      .is-desktop .name-cycle .ch.scan-on {
+        transform: scale(1.12);
+        text-shadow: 0 0 .6em color-mix(in oklab, currentColor 40%, transparent);
+      }
+
+      .is-desktop .name-cycle .ch.scan-on .b i { animation-play-state: running; }
+
+      /* Mobile-only simple name styling */
+      .is-mobile .name-cycle {
+        color: #9E0059;
+        font-weight: 800;
+      }
+
+      @keyframes name-cycle {
+        0% { color: #9E0059; }
+        33.333% { color: #6C0079; }
+        66.666% { color: #FF8900; }
+        100% { color: #9E0059; }
+      }
+      @keyframes name-pulse {
+        0%, 100% { transform: scale(1); }
+        40% { transform: scale(1.06); }
+        60% { transform: scale(1.02); }
+      }
+
+      .is-desktop .name-cycle .ch .b {
+        position: absolute;
+        pointer-events: none;
+        left: -0.05em;
+        right: -0.05em;
+        bottom: -0.2em;
+        top: 0.3em;
+        mix-blend-mode: screen;
+      }
+
+      .is-desktop .name-cycle .ch .b i {
+        position: absolute;
+        bottom: 0;
+        background: currentColor;
+        border-radius: 9999px;
+        opacity: .18;
+        transform: translateY(0) scale(1);
+        animation: float-up var(--dur,7s) linear infinite;
+        animation-play-state: paused;
+      }
+
+      @keyframes float-up {
+        0%   { transform: translateY(40%) scale(.6); opacity: 0; }
+        10%  { opacity: .24; }
+        60%  { opacity: .18; }
+        100% { transform: translateY(-140%) scale(1.2); opacity: 0; }
+      }
+
+      .is-desktop .name-cycle .ch .b i:nth-child(1){ left:4%;  width:6px;  height:6px;  --dur:7s;  animation-delay:0s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(2){ left:18%; width:8px;  height:8px;  --dur:8s;  animation-delay:1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(3){ left:30%; width:5px;  height:5px;  --dur:6.5s;animation-delay:1.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(4){ left:42%; width:7px;  height:7px;  --dur:7.5s;animation-delay:2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(5){ left:54%; width:6px;  height:6px;  --dur:9s;  animation-delay:.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(6){ left:66%; width:9px;  height:9px;  --dur:10s; animation-delay:1.2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(7){ left:78%; width:5px;  height:5px;  --dur:6s;  animation-delay:2.6s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(8){ left:12%; width:4px;  height:4px;  --dur:5.5s;animation-delay:3.1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(9){ left:36%; width:6px;  height:6px;  --dur:7.2s;animation-delay:4s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(10){left:60%; width:5px;  height:5px;  --dur:6.8s;animation-delay:3.7s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(11){left:72%; width:7px;  height:7px;  --dur:8.8s;animation-delay:2.9s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(12){left:88%; width:6px;  height:6px;  --dur:7.9s;animation-delay:1.8s; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .name-cycle { animation: none; }
+        .name-cycle .bubbles i { animation: none; opacity: .15; }
+      }
+
+      /* Mobile performance optimizations */
+      .is-mobile * {
+        will-change: auto !important; /* Disable will-change on mobile for better performance */
+      }
+
+      .is-mobile .animate-fade, .is-mobile .animate-pop {
+        animation: none; /* Disable complex animations on mobile */
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Mobile text color overrides for better visibility */
+      .is-mobile #hero h1,
+      .is-mobile #hero p,
+      .is-mobile #about h2,
+      .is-mobile #about p {
+        color: white !important;
+      }
+
+      /* Available for work badge should match name color on mobile */
+      .is-mobile #hero p.inline-flex {
+        color: #9E0059 !important;
+      }
+
+      /* Contact Me button text should be white on mobile */
+      .is-mobile #hero a[href="#contact-footer"] {
+        color: white !important;
+      }
+
+      /* Ensure text remains readable on mobile gradient background */
+      .is-mobile .text-zinc-600,
+      .is-mobile .text-zinc-700,
+      .is-mobile .dark\:text-zinc-300 {
+        color: white !important;
+      }
+
+      /* Desktop-only scroll animations */
+      .is-desktop .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+
+      .is-desktop .scroll-animate.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .is-desktop .scroll-animate.delay-1 {
+        transition-delay: 0.1s;
+      }
+
+      .is-desktop .scroll-animate.delay-2 {
+        transition-delay: 0.2s;
+      }
+
+      .is-desktop .scroll-animate.delay-3 {
+        transition-delay: 0.3s;
+      }
+
+      /* Modern blog-style project cards */
+      .modern-project-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+      }
+
+      .modern-project-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        border-color: rgba(255,255,255,0.2);
+      }
+
+      .modern-project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #9E0059, #6C0079, #FF8900);
+      }
+
+      .project-meta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.9);
+      }
+
+      .project-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        position: relative;
+        display: inline-block;
+      }
+
+      .project-title::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #9E0059, #FF8900);
+        transition: width 0.3s ease;
+      }
+
+      .project-title:hover::after {
+        width: 100%;
+      }
+
+      .project-description {
+        color: rgba(255,255,255,0.8);
+        line-height: 1.6;
+        margin: 1rem 0;
+      }
+
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .tech-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.625rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.9);
+        transition: all 0.2s ease;
+      }
+
+      .tech-badge:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+      }
+
+      /* Mobile optimizations */
+      .is-mobile .modern-project-card {
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .is-mobile .modern-project-card:hover {
+        transform: none !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+      }
+
+      /* ===== Desktop-only Name color-cycle + bubbles around the name ===== */
+      .is-desktop .name-cycle {
+        position: relative;
+        display: inline-block;
+        color: #9E0059;
+        will-change: color, transform;
+        transform-origin: 50% 60%;
+        text-shadow: 0 0 .35em color-mix(in oklab, currentColor 35%, transparent);
+        animation: name-cycle 15s steps(3, end) infinite, name-pulse 2.6s ease-in-out infinite;
+      }
+
+      .is-desktop .name-cycle .ch {
+        position: relative;
+        display: inline-block;
+        padding: 0 .02em;
+        transform-origin: 50% 60%;
+        transition: transform .28s ease, filter .28s ease;
+      }
+
+      .is-desktop .name-cycle .ch.scan-on {
+        transform: scale(1.12);
+        text-shadow: 0 0 .6em color-mix(in oklab, currentColor 40%, transparent);
+      }
+
+      .is-desktop .name-cycle .ch.scan-on .b i { animation-play-state: running; }
+
+      /* Mobile-only simple name styling */
+      .is-mobile .name-cycle {
+        color: #9E0059;
+        font-weight: 800;
+      }
+
+      @keyframes name-cycle {
+        0% { color: #9E0059; }
+        33.333% { color: #6C0079; }
+        66.666% { color: #FF8900; }
+        100% { color: #9E0059; }
+      }
+      @keyframes name-pulse {
+        0%, 100% { transform: scale(1); }
+        40% { transform: scale(1.06); }
+        60% { transform: scale(1.02); }
+      }
+
+      .is-desktop .name-cycle .ch .b {
+        position: absolute;
+        pointer-events: none;
+        left: -0.05em;
+        right: -0.05em;
+        bottom: -0.2em;
+        top: 0.3em;
+        mix-blend-mode: screen;
+      }
+
+      .is-desktop .name-cycle .ch .b i {
+        position: absolute;
+        bottom: 0;
+        background: currentColor;
+        border-radius: 9999px;
+        opacity: .18;
+        transform: translateY(0) scale(1);
+        animation: float-up var(--dur,7s) linear infinite;
+        animation-play-state: paused;
+      }
+
+      @keyframes float-up {
+        0%   { transform: translateY(40%) scale(.6); opacity: 0; }
+        10%  { opacity: .24; }
+        60%  { opacity: .18; }
+        100% { transform: translateY(-140%) scale(1.2); opacity: 0; }
+      }
+
+      .is-desktop .name-cycle .ch .b i:nth-child(1){ left:4%;  width:6px;  height:6px;  --dur:7s;  animation-delay:0s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(2){ left:18%; width:8px;  height:8px;  --dur:8s;  animation-delay:1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(3){ left:30%; width:5px;  height:5px;  --dur:6.5s;animation-delay:1.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(4){ left:42%; width:7px;  height:7px;  --dur:7.5s;animation-delay:2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(5){ left:54%; width:6px;  height:6px;  --dur:9s;  animation-delay:.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(6){ left:66%; width:9px;  height:9px;  --dur:10s; animation-delay:1.2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(7){ left:78%; width:5px;  height:5px;  --dur:6s;  animation-delay:2.6s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(8){ left:12%; width:4px;  height:4px;  --dur:5.5s;animation-delay:3.1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(9){ left:36%; width:6px;  height:6px;  --dur:7.2s;animation-delay:4s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(10){left:60%; width:5px;  height:5px;  --dur:6.8s;animation-delay:3.7s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(11){left:72%; width:7px;  height:7px;  --dur:8.8s;animation-delay:2.9s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(12){left:88%; width:6px;  height:6px;  --dur:7.9s;animation-delay:1.8s; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .name-cycle { animation: none; }
+        .name-cycle .bubbles i { animation: none; opacity: .15; }
+      }
+
+      /* Mobile performance optimizations */
+      .is-mobile * {
+        will-change: auto !important; /* Disable will-change on mobile for better performance */
+      }
+
+      .is-mobile .animate-fade, .is-mobile .animate-pop {
+        animation: none; /* Disable complex animations on mobile */
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Mobile text color overrides for better visibility */
+      .is-mobile #hero h1,
+      .is-mobile #hero p,
+      .is-mobile #about h2,
+      .is-mobile #about p {
+        color: white !important;
+      }
+
+      /* Available for work badge should match name color on mobile */
+      .is-mobile #hero p.inline-flex {
+        color: #9E0059 !important;
+      }
+
+      /* Contact Me button text should be white on mobile */
+      .is-mobile #hero a[href="#contact-footer"] {
+        color: white !important;
+      }
+
+      /* Ensure text remains readable on mobile gradient background */
+      .is-mobile .text-zinc-600,
+      .is-mobile .text-zinc-700,
+      .is-mobile .dark\:text-zinc-300 {
+        color: white !important;
+      }
+
+      /* Desktop-only scroll animations */
+      .is-desktop .scroll-animate {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+      }
+
+      .is-desktop .scroll-animate.animate-in {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .is-desktop .scroll-animate.delay-1 {
+        transition-delay: 0.1s;
+      }
+
+      .is-desktop .scroll-animate.delay-2 {
+        transition-delay: 0.2s;
+      }
+
+      .is-desktop .scroll-animate.delay-3 {
+        transition-delay: 0.3s;
+      }
+
+      /* Modern blog-style project cards */
+      .modern-project-card {
+        position: relative;
+        overflow: hidden;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255,255,255,0.1);
+        transition: all 0.3s ease;
+      }
+
+      .modern-project-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        border-color: rgba(255,255,255,0.2);
+      }
+
+      .modern-project-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, #9E0059, #6C0079, #FF8900);
+      }
+
+      .project-meta-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.9);
+      }
+
+      .project-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: white;
+        text-decoration: none;
+        position: relative;
+        display: inline-block;
+      }
+
+      .project-title::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background: linear-gradient(90deg, #9E0059, #FF8900);
+        transition: width 0.3s ease;
+      }
+
+      .project-title:hover::after {
+        width: 100%;
+      }
+
+      .project-description {
+        color: rgba(255,255,255,0.8);
+        line-height: 1.6;
+        margin: 1rem 0;
+      }
+
+      .tech-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .tech-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        padding: 0.25rem 0.625rem;
+        border-radius: 0.5rem;
+        font-size: 0.75rem;
+        font-weight: 500;
+        background: rgba(0,0,0,0.3);
+        border: 1px solid rgba(255,255,255,0.1);
+        color: rgba(255,255,255,0.9);
+        transition: all 0.2s ease;
+      }
+
+      .tech-badge:hover {
+        background: rgba(255,255,255,0.1);
+        border-color: rgba(255,255,255,0.2);
+      }
+
+      /* Mobile optimizations */
+      .is-mobile .modern-project-card {
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .is-mobile .modern-project-card:hover {
+        transform: none !important;
+        box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+      }
+
+      /* ===== Desktop-only Name color-cycle + bubbles around the name ===== */
+      .is-desktop .name-cycle {
+        position: relative;
+        display: inline-block;
+        color: #9E0059;
+        will-change: color, transform;
+        transform-origin: 50% 60%;
+        text-shadow: 0 0 .35em color-mix(in oklab, currentColor 35%, transparent);
+        animation: name-cycle 15s steps(3, end) infinite, name-pulse 2.6s ease-in-out infinite;
+      }
+
+      .is-desktop .name-cycle .ch {
+        position: relative;
+        display: inline-block;
+        padding: 0 .02em;
+        transform-origin: 50% 60%;
+        transition: transform .28s ease, filter .28s ease;
+      }
+
+      .is-desktop .name-cycle .ch.scan-on {
+        transform: scale(1.12);
+        text-shadow: 0 0 .6em color-mix(in oklab, currentColor 40%, transparent);
+      }
+
+      .is-desktop .name-cycle .ch.scan-on .b i { animation-play-state: running; }
+
+      /* Mobile-only simple name styling */
+      .is-mobile .name-cycle {
+        color: #9E0059;
+        font-weight: 800;
+      }
+
+      @keyframes name-cycle {
+        0% { color: #9E0059; }
+        33.333% { color: #6C0079; }
+        66.666% { color: #FF8900; }
+        100% { color: #9E0059; }
+      }
+      @keyframes name-pulse {
+        0%, 100% { transform: scale(1); }
+        40% { transform: scale(1.06); }
+        60% { transform: scale(1.02); }
+      }
+
+      .is-desktop .name-cycle .ch .b {
+        position: absolute;
+        pointer-events: none;
+        left: -0.05em;
+        right: -0.05em;
+        bottom: -0.2em;
+        top: 0.3em;
+        mix-blend-mode: screen;
+      }
+
+      .is-desktop .name-cycle .ch .b i {
+        position: absolute;
+        bottom: 0;
+        background: currentColor;
+        border-radius: 9999px;
+        opacity: .18;
+        transform: translateY(0) scale(1);
+        animation: float-up var(--dur,7s) linear infinite;
+        animation-play-state: paused;
+      }
+
+      @keyframes float-up {
+        0%   { transform: translateY(40%) scale(.6); opacity: 0; }
+        10%  { opacity: .24; }
+        60%  { opacity: .18; }
+        100% { transform: translateY(-140%) scale(1.2); opacity: 0; }
+      }
+
+      .is-desktop .name-cycle .ch .b i:nth-child(1){ left:4%;  width:6px;  height:6px;  --dur:7s;  animation-delay:0s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(2){ left:18%; width:8px;  height:8px;  --dur:8s;  animation-delay:1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(3){ left:30%; width:5px;  height:5px;  --dur:6.5s;animation-delay:1.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(4){ left:42%; width:7px;  height:7px;  --dur:7.5s;animation-delay:2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(5){ left:54%; width:6px;  height:6px;  --dur:9s;  animation-delay:.5s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(6){ left:66%; width:9px;  height:9px;  --dur:10s; animation-delay:1.2s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(7){ left:78%; width:5px;  height:5px;  --dur:6s;  animation-delay:2.6s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(8){ left:12%; width:4px;  height:4px;  --dur:5.5s;animation-delay:3.1s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(9){ left:36%; width:6px;  height:6px;  --dur:7.2s;animation-delay:4s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(10){left:60%; width:5px;  height:5px;  --dur:6.8s;animation-delay:3.7s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(11){left:72%; width:7px;  height:7px;  --dur:8.8s;animation-delay:2.9s; }
+      .is-desktop .name-cycle .ch .b i:nth-child(12){left:88%; width:6px;  height:6px;  --dur:7.9s;animation-delay:1.8s; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .name-cycle { animation: none; }
+        .name-cycle .bubbles i { animation: none; opacity: .15; }
+      }
+
+      /* Mobile performance optimizations */
+      .is-mobile * {
+        will-change: auto !important; /* Disable will-change on mobile for better performance */
+      }
+
+      .is-mobile .animate-fade, .is-mobile .animate-pop {
+        animation: none; /* Disable complex animations on mobile */
+        opacity: 1;
+        transform: none;
+      }
+
+      /* Mobile text color overrides for better visibility */
+      .is-mobile #hero h1,
+      .is-mobile #hero p,
+      .is-mobile #about h2,
+      .is-mobile #about p {
+        color: white !important;
+      }
+
+      /* Available for work badge should match name color on mobile */
+      .is-mobile #hero p.inline-flex {
+        color: #9E0059 !important;
+      }
+
+      /* Contact Me button text should be white on mobile */
+      .is-mobile #hero a[href="#contact-footer"] {
+        color: white !important;
+      }
+
+      /* Ensure text remains readable on mobile gradient background */
+      .is-mobile .text-zinc-600,
+      .is-mobile .text-zinc-700,
+      .is-mobile .dark\:text-zinc-300 {
+        color: white !important;
+      }
     </style>
 
     <script>
@@ -314,7 +1088,7 @@
         });
       });
     </script>
-  
+
 <style>
   .skill-chip.is-active{ outline: 2px solid rgb(129 140 248 / 0.7); background: rgb(39 39 42 / 0.6); }
 </style>
@@ -322,7 +1096,7 @@
 <style>
   .skill-dot[aria-pressed="true"]{ outline: 3px solid rgba(255,255,255,0.6); outline-offset: 2px; }
 </style>
-</head>
+  </head>
 
   <body class="bg-zinc-50 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 antialiased">
     <a href="#main" class="sr-only focus:not-sr-only focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-transparent rounded px-3 py-2 absolute left-3 top-3 bg-white/90 dark:bg-zinc-900/90 z-[60]">Skip to content</a>
@@ -451,6 +1225,13 @@
     })();
     </script>
 
+    <style>
+  .skill-chip.is-active{ outline: 2px solid rgb(129 140 248 / 0.7); background: rgb(39 39 42 / 0.6); }
+</style>
+
+<style>
+  .skill-dot[aria-pressed="true"]{ outline: 3px solid rgba(255,255,255,0.6); outline-offset: 2px; }
+</style>
     <main id="main" class="relative">
       <!-- Hero -->
       <section id="hero" class="relative overflow-hidden">
@@ -459,7 +1240,7 @@
         </div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24 lg:py-28">
           <div class="grid lg:grid-cols-2 gap-10 items-center">
-            <div class="space-y-6 is-desktop:animate-fade">
+            <div class="space-y-6 scroll-animate">
               <p class="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-700 dark:text-brand-300 bg-brand-50 dark:bg-brand-700/20 px-3 py-1 rounded-full w-max">
                 <span class="w-2 h-2 rounded-full bg-brand-500"></span> Available for work
               </p>
@@ -480,7 +1261,7 @@
                 </a>
               </div>
             </div>
-            <div class="lg:justify-self-end is-desktop:animate-pop">
+            <div class="lg:justify-self-end scroll-animate delay-1">
               <div class="relative p-2 rounded-[2rem] bg-gradient-to-tr from-brand-400/20 to-transparent">
                 <div class="rounded-[1.5rem] p-6 bg-white/80 dark:bg-zinc-900/80 backdrop-blur-xl shadow-soft border border-zinc-200/70 dark:border-white/10">
                   <img src="https://i.ibb.co/PGSdyWkZ/IMG-8518.jpg" alt="Working at a laptop" class="rounded-xl object-cover object-top aspect-[4/4] w-full" loading="lazy" />
@@ -506,19 +1287,23 @@
       <!-- About -->
       <section id="about" class="py-20 sm:py-24">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 class="text-center text-3xl sm:text-4xl font-extrabold mb-6 text-white">About Me</h2>
-          <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
-          <p class="text-zinc-700 text-justify dark:text-zinc-300 leading-relaxed max-w-6xl">
-            A passionate data alchemist who transforms raw numbers into strategic narratives, I thrive at the crossroads of curiosity and rigor. With a mastery of SQL's intricate joins and window functions, I unearth hidden patterns from sprawling datasets. Python is my canvas: I wield Pandas and NumPy to sculpt data pipelines, apply scikit-learn to craft predictive models, and harness Matplotlib to paint compelling visual stories.
-            <br /><br />
-            Every analysis I undertake begins with a question—Why did this trend emerge? Which segment is driving growth?—and ends with clear, actionable recommendations. I excel at designing experiments, from A/B tests that optimize user experience to cohort analyses that deepen our understanding of customer behavior. Whether I'm modeling lifetime value to guide marketing spend or building dashboards in Tableau and Power BI to monitor real-time performance, my focus is always on bridging data and decision-making.
-            <br /><br />
-            Collaboration is at the heart of my work. I partner with product managers to define key performance indicators, work alongside engineers to automate ETL workflows, and coach stakeholders on data literacy so that insights spur meaningful action. Adaptable and ever-eager to learn, I stay abreast of emerging tools—like Snowflake, dbt, or advanced machine-learning frameworks—and integrate them to streamline processes and enhance predictive power.
-            <br /><br />
-            Ultimately, I'm driven by impact: empowering teams to make smarter choices, uncovering opportunities in the noise of big data, and crafting narratives that inspire confidence. If you seek a data analyst who combines technical prowess with strategic vision—and a dash of creative flair—you've found your analytical storyteller.
-            <br /><br />
-              When I'm not immersed in data, you can find me exploring the latest tech trends, experimenting with new recipes, enjoying a history book or playing badminton, football. I believe in lifelong learning and am always looking for ways to expand my skill set and knowledge base.
-          </p>
+          <div class="scroll-animate">
+            <h2 class="text-center text-3xl sm:text-4xl font-extrabold mb-6 text-white">About Me</h2>
+            <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
+          </div>
+          <div class="scroll-animate delay-1">
+            <p class="text-zinc-700 text-justify dark:text-zinc-300 leading-relaxed max-w-6xl">
+              A passionate data alchemist who transforms raw numbers into strategic narratives, I thrive at the crossroads of curiosity and rigor. With a mastery of SQL's intricate joins and window functions, I unearth hidden patterns from sprawling datasets. Python is my canvas: I wield Pandas and NumPy to sculpt data pipelines, apply scikit-learn to craft predictive models, and harness Matplotlib to paint compelling visual stories.
+              <br /><br />
+              Every analysis I undertake begins with a question—Why did this trend emerge? Which segment is driving growth?—and ends with clear, actionable recommendations. I excel at designing experiments, from A/B tests that optimize user experience to cohort analyses that deepen our understanding of customer behavior. Whether I'm modeling lifetime value to guide marketing spend or building dashboards in Tableau and Power BI to monitor real-time performance, my focus is always on bridging data and decision-making.
+              <br /><br />
+              Collaboration is at the heart of my work. I partner with product managers to define key performance indicators, work alongside engineers to automate ETL workflows, and coach stakeholders on data literacy so that insights spur meaningful action. Adaptable and ever-eager to learn, I stay abreast of emerging tools—like Snowflake, dbt, or advanced machine-learning frameworks—and integrate them to streamline processes and enhance predictive power.
+              <br /><br />
+              Ultimately, I'm driven by impact: empowering teams to make smarter choices, uncovering opportunities in the noise of big data, and crafting narratives that inspire confidence. If you seek a data analyst who combines technical prowess with strategic vision—and a dash of creative flair—you've found your analytical storyteller.
+              <br /><br />
+                When I'm not immersed in data, you can find me exploring the latest tech trends, experimenting with new recipes, enjoying a history book or playing badminton, football. I believe in lifelong learning and am always looking for ways to expand my skill set and knowledge base.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -526,11 +1311,13 @@
       <!-- SKILLS -->
       <section id="skills" class="py-16 sm:py-20">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 class="text-3xl sm:text-5xl font-extrabold text-white">My Skills</h2>
-          <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
-          <p id="skillsMeta" class="text-zinc-400 mb-8">Scanning featured projects…</p>
+          <div class="scroll-animate">
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white">My Skills</h2>
+            <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
+            <p id="skillsMeta" class="text-zinc-400 mb-8">Scanning featured projects…</p>
+          </div>
 
-          <div id="skillBadges" class="flex flex-wrap justify-center gap-3">
+          <div id="skillBadges" class="flex flex-wrap justify-center gap-3 scroll-animate delay-1">
             <!-- badge: dot + label + (count) -->
             <button type="button" class="skill-badge inline-flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-800/60 border border-zinc-700/60 text-zinc-200 hover:bg-zinc-800 transition" data-skill="*" aria-pressed="true">
               <span class="inline-block size-2 rounded-full bg-zinc-400"></span><span>All</span><span class="opacity-70">(0)</span>
@@ -578,131 +1365,344 @@
       <!-- PROJECTS FILTER (hidden by default; shows clones) -->
       <section id="projects-filter" class="py-10 sm:py-12 hidden">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between mb-4">
+          <div class="flex items-center justify-between mb-4 scroll-animate">
             <h3 class="text-2xl font-bold text-white" data-filter-title>Projects by Skill</h3>
             <button id="clearFilterBtn" class="text-sm px-3 py-1 rounded-md border border-zinc-600/40 text-zinc-200 hover:bg-zinc-800/60">Clear</button>
           </div>
-          <div id="projectsFilteredGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3"></div>
+          <div id="projectsFilteredGrid" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 scroll-animate delay-1"></div>
         </div>
       </section>
 
-      <!-- FEATURED PROJECTS (GitHub-style cards) -->
+      <!-- FEATURED PROJECTS (Modern Blog Style) -->
       <section id="projects" class="py-20 sm:py-24">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <h2 class="text-3xl sm:text-5xl font-extrabold text-white text-center">Featured Projects</h2>
-          <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
-            <p id="project_meta" class="text-zinc-400 mb-8 text-center">Projects I have worked on (Click to view details)</p>
-          <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            <!-- 1 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="">Modern-Portfolio</a>
+          <div class="text-center mb-16 scroll-animate">
+            <h2 class="text-3xl sm:text-5xl font-extrabold text-white">Featured Projects</h2>
+            <div class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></div>
+            <p class="text-zinc-400 max-w-2xl mx-auto">A collection of projects that showcase my expertise in data analysis, machine learning, and business intelligence.</p>
+          </div>
+
+          <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+            <!-- Project 1 -->
+            <article class="modern-project-card p-6 scroll-animate" data-skills="">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-blue-400"></div>
+                  <span>Portfolio</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zm4.03 6.28a.75.75 0 00-1.06-1.06L6 8.44 4.78 7.22a.75.75 0 00-1.06 1.06L5.44 10l-1.72 1.72a.75.75 0 101.06 1.06L6 11.56l1.22 1.22a.75.75 0 001.06-1.06L6.56 10l1.72-1.72z" clip-rule="evenodd" />
+                </svg>
               </div>
-              <p class="mt-2 text-zinc-300">Personal portfolio built with Tailwind CSS and Numpy</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-blue-400"></span>HTML</span>
-              </div>
-            </article>
-            <!-- 2 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="bigquery, pandas, numpy">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="https://github.com/Khangnguyen01/Bulk-Create-Flatten-Table-BigQuery">Bulk-Create-Flatten-Table-BigQuery</a>
-              </div>
-              <p class="mt-2 text-zinc-300">Create multiple flattened event tables on BigQuery in minutes.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>BigQuery</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-amber-400"></span>Pandas</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-blue-400"></span>Numpy</span>
-              </div>
-            </article>
-            <!-- 3 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="gmail api,selenium,pandas,numpy">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="https://github.com/Khangnguyen01/BS-Auto-Weekly-Marketing-Data-Report">BS-Auto-Weekly-Marketing-Data-Report</a>
-              </div>
-              <p class="mt-2 text-zinc-300">Automatic Weekly Marketing Data Report.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-cyan-400"></span>Gmail API</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-cyan-400"></span>Selenium</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-amber-400"></span>Pandas</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-blue-400"></span>Numpy</span>
-              </div>
-            </article>
-            <!-- 4 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="machine learning,notebook,classification, pandas, numpy">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="https://github.com/Khangnguyen01/Predict-IAP-Users-from-Login-Phrase">IAP-Users-Prediction</a>
-              </div>
-              <p class="mt-2 text-zinc-300">Predict IAP Users.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>BigQuery</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-sky-400"></span>Classification</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-cyan-400"></span>Machine Learning</span>
+
+              <h3>
+                <a href="" class="project-title">Modern Portfolio</a>
+              </h3>
+
+              <p class="project-description">
+                A responsive personal portfolio built with modern web technologies, featuring smooth animations and an elegant dark theme design.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span>
+                  HTML
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-cyan-400"></span>
+                  CSS
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+                  JavaScript
+                </span>
               </div>
             </article>
-            <!-- 5 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="bigquery, statistic analyst,notebook, pandas, numpy">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="https://github.com/Khangnguyen01/Analyst-IAP-Users-Behavior">Analyst-IAP-Users-Behavior</a>
+
+            <!-- Project 2 -->
+            <article class="modern-project-card p-6 scroll-animate delay-1" data-skills="bigquery, pandas, numpy">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                  <span>Data Engineering</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M10.75 16.82A7.462 7.462 0 0115 15.5c.71 0 1.396.098 2.046.282A.75.75 0 0018 15.06v-11a.75.75 0 00-.546-.721A9.006 9.006 0 0015 3a8.963 8.963 0 00-4.25 1.065V16.82zM9.25 4.065A8.963 8.963 0 005 3c-.85 0-1.705.165-2.454.343A.75.75 0 002 4.064v11a.75.75 0 00.954.721A7.506 7.506 0 015 15.5c1.579 0 3.042.487 4.25 1.32V4.065z" />
+                </svg>
               </div>
-              <p class="mt-2 text-zinc-300">Analyst IAP Users Behavior.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>BigQuery</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-zinc-400"></span>Statistical Analyst</span>
-              </div>
-            </article>
-            <!-- 6 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="power bi">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="https://app.powerbi.com/view?r=eyJrIjoiZDIxMzA0MTYtNjM1NS00MTQ2LWFjOTctN2I5OWI2ZTMzZDhlIiwidCI6ImZiMjRhMjBjLThkYjQtNGFmNS1hN2YxLTVmNjNmN2JiYzRjOSIsImMiOjZ9">BS - Daily Check Dashboard</a>
-              </div>
-              <p class="mt-2 text-zinc-300">Daily Dashboard to check campaign, revenue.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-slate-300"></span>Power BI</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>Story Telling</span>
-              </div>
-            </article>
-            <!-- 7 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="power bi">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="">BS - Weekly Check Dashboard</a>
-              </div>
-              <p class="mt-2 text-zinc-300">Weekly Dashboard to check overall company performance.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-slate-300"></span>Power BI</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>Story Telling</span>
-              </div>
-            </article>
-            <!-- 8 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="power bi">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="">BS - Monthly Check Dashboard</a>
-              </div>
-              <p class="mt-2 text-zinc-300">Monthly Dashboard to check search term effectiveness.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-slate-300"></span>Power BI</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>Story Telling</span>
+
+              <h3>
+                <a href="https://github.com/Khangnguyen01/Bulk-Create-Flatten-Table-BigQuery" class="project-title">BigQuery Table Automation</a>
+              </h3>
+
+              <p class="project-description">
+                Automated solution for creating multiple flattened event tables on BigQuery in minutes, streamlining data preprocessing workflows.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                  BigQuery
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span>
+                  Pandas
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span>
+                  NumPy
+                </span>
               </div>
             </article>
-            <!-- 9 -->
-            <article class="project-card group rounded-xl border border-zinc-700/40 bg-zinc-900/40 hover:bg-zinc-900/70 transition shadow-lg p-5" data-skills="machine learning, notebook, regression, pandas, numpy">
-              <div class="flex items-start gap-2">
-                <svg class="w-5 h-5 text-zinc-400 group-hover:text-zinc-300" viewBox="0 0 16 16" fill="currentColor"><path d="M2 2.5A2.5 2.5 0 014.5 0h7A2.5 2.5 0 0114 2.5v11a.5.5 0 01-.757.429L10 12.101l-3.243 1.828A.5.5 0 016 13.5v-11A2.5 2.5 0 003.5 0H2v2.5z"/></svg>
-                <a class="font-semibold text-white hover:underline" href="https://github.com/Khangnguyen01/Predict-Campaign-LTV">Predict-Campaign-ROAS-LTV</a>
+
+            <!-- Project 3 -->
+            <article class="modern-project-card p-6 scroll-animate delay-2" data-skills="gmail api,selenium,pandas,numpy">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-purple-400"></div>
+                  <span>Automation</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M15.988 3.012A2.25 2.25 0 0118 5.25v6.5A2.25 2.25 0 0115.75 14H13.5V7A2.5 2.5 0 0011 4.5H8.128a2.252 2.252 0 011.884-1.488A2.25 2.25 0 0112.25 1h1.5a2.25 2.25 0 012.238 2.012zM11.5 3.25a.75.75 0 01.75-.75h1.5a.75.75 0 01.75.75v.25h-3v-.25z" clip-rule="evenodd" />
+                  <path fill-rule="evenodd" d="M2 7a1 1 0 011-1h8a1 1 0 011 1v10a1 1 0 01-1 1H3a1 1 0 01-1-1V7zm2 3.25a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75zm0 3.5a.75.75 0 01.75-.75h4.5a.75.75 0 010 1.5h-4.5a.75.75 0 01-.75-.75z" clip-rule="evenodd" />
+                </svg>
               </div>
-              <p class="mt-2 text-zinc-300">Predict Campaign Roas & LTV.</p>
-              <div class="mt-4 flex items-center text-xs text-zinc-400 gap-4">
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>MongoDB</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-emerald-400"></span>BigQuery</span>
-                <span class="inline-flex items-center gap-2"><span class="inline-block size-2 rounded-full bg-cyan-400"></span>Machine Learning</span>
+
+              <h3>
+                <a href="https://github.com/Khangnguyen01/BS-Auto-Weekly-Marketing-Data-Report" class="project-title">Auto Marketing Report</a>
+              </h3>
+
+              <p class="project-description">
+                Automated weekly marketing data reporting system that collects, processes, and distributes insights via email notifications.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-red-400"></span>
+                  Gmail API
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-orange-400"></span>
+                  Selenium
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-amber-400"></span>
+                  Pandas
+                </span>
+              </div>
+            </article>
+
+            <!-- Project 4 -->
+            <article class="modern-project-card p-6 scroll-animate delay-3" data-skills="machine learning,notebook,classification, pandas, numpy">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
+                  <span>Machine Learning</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z" />
+                </svg>
+              </div>
+
+              <h3>
+                <a href="https://github.com/Khangnguyen01/Predict-IAP-Users-from-Login-Phrase" class="project-title">IAP User Prediction</a>
+              </h3>
+
+              <p class="project-description">
+                Machine learning model to predict in-app purchase behavior from user login patterns, helping optimize monetization strategies.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-cyan-400"></span>
+                  ML
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-sky-400"></span>
+                  Classification
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-purple-400"></span>
+                  Jupyter
+                </span>
+              </div>
+            </article>
+
+            <!-- Project 5 -->
+            <article class="modern-project-card p-6 scroll-animate delay-1" data-skills="bigquery, statistic analyst,notebook, pandas, numpy">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-pink-400"></div>
+                  <span>Analytics</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zM15 5.75a.75.75 0 00-1.5 0v8.5a.75.75 0 001.5 0v-8.5zm-8.5 6a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5zm3.5-4a.75.75 0 00-1.5 0v6.5a.75.75 0 001.5 0V7.75z" clip-rule="evenodd" />
+                </svg>
+              </div>
+
+              <h3>
+                <a href="https://github.com/Khangnguyen01/Analyst-IAP-Users-Behavior" class="project-title">User Behavior Analysis</a>
+              </h3>
+
+              <p class="project-description">
+                Comprehensive statistical analysis of in-app purchase user behavior patterns to identify key engagement drivers and optimize user experience.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                  BigQuery
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-pink-400"></span>
+                  Statistics
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-purple-400"></span>
+                  Analysis
+                </span>
+              </div>
+            </article>
+
+            <!-- Project 6 -->
+            <article class="modern-project-card p-6 scroll-animate delay-2" data-skills="power bi">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                  <span>Dashboard</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zM15 5.75a.75.75 0 00-1.5 0v8.5a.75.75 0 001.5 0v-8.5zm-8.5 6a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5zm3.5-4a.75.75 0 00-1.5 0v6.5a.75.75 0 001.5 0V7.75z" clip-rule="evenodd" />
+                </svg>
+              </div>
+
+              <h3>
+                <a href="https://app.powerbi.com/view?r=eyJrIjoiZDIxMzA0MTYtNjM1NS00MTQ2LWFjOTctN2I5OWI2ZTMzZDhlIiwidCI6ImZiMjRhMjBjLThkYjQtNGFmNS1hN2YxLTVmNjNmN2JiYzRjOSIsImMiOjZ9" class="project-title">Daily Business Dashboard</a>
+              </h3>
+
+              <p class="project-description">
+                Interactive Power BI dashboard for daily monitoring of campaign performance, revenue tracking, and key business metrics.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+                  Power BI
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                  Visualization
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span>
+                  KPI Tracking
+                </span>
+              </div>
+            </article>
+
+              <!-- Project 7 -->
+            <article class="modern-project-card p-6 scroll-animate delay-2" data-skills="power bi">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                  <span>Dashboard</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zM15 5.75a.75.75 0 00-1.5 0v8.5a.75.75 0 001.5 0v-8.5zm-8.5 6a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5zm3.5-4a.75.75 0 00-1.5 0v6.5a.75.75 0 001.5 0V7.75z" clip-rule="evenodd" />
+                </svg>
+              </div>
+
+              <h3>
+                <a href="" class="project-title">Weekly Business Dashboard</a>
+              </h3>
+
+              <p class="project-description">
+                Interactive Power BI dashboard for weekly monitoring of campaign performance, revenue tracking, and key business metrics.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+                  Power BI
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                  Visualization
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span>
+                  KPI Tracking
+                </span>
+              </div>
+            </article>
+              <!-- Project 8 -->
+            <article class="modern-project-card p-6 scroll-animate delay-2" data-skills="power bi">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                  <span>Dashboard</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M4.25 2A2.25 2.25 0 002 4.25v11.5A2.25 2.25 0 004.25 18h11.5A2.25 2.25 0 0018 15.75V4.25A2.25 2.25 0 0015.75 2H4.25zM15 5.75a.75.75 0 00-1.5 0v8.5a.75.75 0 001.5 0v-8.5zm-8.5 6a.75.75 0 00-1.5 0v2.5a.75.75 0 001.5 0v-2.5zm3.5-4a.75.75 0 00-1.5 0v6.5a.75.75 0 001.5 0V7.75z" clip-rule="evenodd" />
+                </svg>
+              </div>
+
+              <h3>
+                <a href="" class="project-title">Monthly Business Dashboard</a>
+              </h3>
+
+              <p class="project-description">
+                Interactive Power BI dashboard for monthly monitoring of campaign and keyword performance.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-yellow-400"></span>
+                  Power BI
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                  Visualization
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-blue-400"></span>
+                  KPI Tracking
+                </span>
+              </div>
+            </article>
+              <!-- Project 9 -->
+            <article class="modern-project-card p-6 scroll-animate delay-3" data-skills="machine learning,notebook,regression, pandas, numpy">
+              <div class="flex items-start justify-between mb-4">
+                <div class="project-meta-badge">
+                  <div class="w-2 h-2 rounded-full bg-cyan-400"></div>
+                  <span>Machine Learning</span>
+                </div>
+                <svg class="w-5 h-5 text-zinc-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path d="M15.5 2A1.5 1.5 0 0014 3.5v13a1.5 1.5 0 001.5 1.5h1a1.5 1.5 0 001.5-1.5v-13A1.5 1.5 0 0016.5 2h-1zM9.5 6A1.5 1.5 0 008 7.5v9A1.5 1.5 0 009.5 18h1a1.5 1.5 0 001.5-1.5v-9A1.5 1.5 0 0010.5 6h-1zM3.5 10A1.5 1.5 0 002 11.5v5A1.5 1.5 0 003.5 18h1A1.5 1.5 0 006 16.5v-5A1.5 1.5 0 004.5 10h-1z" />
+                </svg>
+              </div>
+
+              <h3>
+                <a href="https://app.powerbi.com/view?r=eyJrIjoiZDIxMzA0MTYtNjM1NS00MTQ2LWFjOTctN2I5OWI2ZTMzZDhlIiwidCI6ImZiMjRhMjBjLThkYjQtNGFmNS1hN2YxLTVmNjNmN2JiYzRjOSIsImMiOjZ9" class="project-title">Predict Campaign Roas & LTV</a>
+              </h3>
+
+              <p class="project-description">
+                Applied machine learning model to predict ROAS and LTV for UA campaigns. Optimized for D3, D7, D14 and D30.
+              </p>
+
+              <div class="tech-stack">
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-emerald-400"></span>
+                  BigQuery
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-cyan-400"></span>
+                  ML
+                </span>
+                <span class="tech-badge">
+                  <span class="inline-block w-2 h-2 rounded-full bg-sky-400"></span>
+                  Regression
+                </span>
               </div>
             </article>
           </div>
@@ -712,13 +1712,15 @@
       <!-- TIMELINE EXPERIENCE -->
       <section id="experience" class="py-20 sm:py-24">
         <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="scroll-animate">
             <h2 class="text-3xl sm:text-5xl font-extrabold text-white text-center">Working Experiences</h2>
-          <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
+            <h2 class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-6"></h2>
+          </div>
           <div class="relative">
             <div class="absolute left-1/2 top-0 bottom-0 w-px bg-zinc-700/60 -translate-x-1/2 hidden sm:block"></div>
             <ol class="space-y-12">
               <!-- Item 1 (left) -->
-              <li class="relative">
+              <li class="relative scroll-animate delay-1">
                 <div class="absolute left-1/2 -translate-x-1/2 top-3 w-3 h-3 rounded-full bg-indigo-400 ring-4 ring-zinc-900 hidden sm:block"></div>
                 <div class="lg:grid lg:grid-cols-2 lg:gap-12 items-start">
                   <div class="lg:pr-10">
@@ -749,7 +1751,7 @@
                 </div>
               </li>
               <!-- Item 2 (right) -->
-              <li class="relative">
+              <li class="relative scroll-animate delay-2">
                 <div class="absolute left-1/2 -translate-x-1/2 top-3 w-3 h-3 rounded-full bg-cyan-400 ring-4 ring-zinc-900 hidden sm:block"></div>
                 <div class="lg:grid lg:grid-cols-2 lg:gap-12 items-start">
                   <div class="hidden lg:block"></div>
@@ -787,11 +1789,13 @@
     <!-- EDUCATION (simple cards — bachelor's + courses) -->
     <section id="education" class="py-20 sm:py-24">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="text-3xl sm:text-5xl font-extrabold text-white text-center">Education</h2>
-        <div class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-10"></div>
+        <div class="scroll-animate">
+          <h2 class="text-3xl sm:text-5xl font-extrabold text-white text-center">Education</h2>
+          <div class="h-1 w-80 bg-gradient-to-r from-fuchsia-500 to-indigo-500 rounded-full mx-auto mt-3 mb-10"></div>
+        </div>
 
         <!-- Bachelor -->
-        <article class="p-6 rounded-2xl shadow-xl bg-zinc-900/50 border border-zinc-700/40">
+        <article class="p-6 rounded-2xl shadow-xl bg-zinc-900/50 border border-zinc-700/40 scroll-animate delay-1">
           <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
             <div>
               <h3 class="text-white text-lg font-semibold">National Economics University</h3>
@@ -826,9 +1830,11 @@
     <!-- Contact -->
     <section id="contact_section" class="py-20 sm:py-24">
     <div class="max-w-4xl mx-auto px-4 text-center text-gray-200">
-      <h2 class="text-4xl font-bold mb-6">Let's Connect 🤝</h2>
-      <p class="mb-8">Whether you have a project in mind or just want to say hi, my inbox is always open.</p>
-      <div class="flex justify-center space-x-6">
+      <div class="scroll-animate">
+        <h2 class="text-4xl font-bold mb-6">Let's Connect 🤝</h2>
+        <p class="mb-8">Whether you have a project in mind or just want to say hi, my inbox is always open.</p>
+      </div>
+      <div class="flex justify-center space-x-6 scroll-animate delay-1">
         <a href="mailto:khangnguyenforwork@outlook.com" class="text-3xl hover:text-indigo-400"><i class="fas fa-envelope"></i></a>
         <a href="https://www.linkedin.com/in/npkhang0304/" target="_blank" class="text-3xl hover:text-indigo-400"><i class="fab fa-linkedin"></i></a>
         <a href="https://github.com/Khangnguyen01" target="_blank" class="text-3xl hover:text-indigo-400"><i class="fab fa-github"></i></a>
@@ -848,7 +1854,7 @@
           const filterGrid = document.getElementById('projectsFilteredGrid');
           const clearBtn = document.getElementById('clearFilterBtn');
           const featured = document.getElementById('projects');
-          const cards = featured ? Array.from(featured.querySelectorAll('.project-card')) : [];
+          const cards = featured ? Array.from(featured.querySelectorAll('.modern-project-card')) : [];
           const skillsMeta = document.getElementById('skillsMeta');
 
           function listSkills(card){
@@ -864,7 +1870,7 @@
             const el = btn.querySelector('span.opacity-70');
             if (el) el.textContent = '('+count+')';
           });
-          if (skillsMeta) skillsMeta.textContent = 'Select any skill to filter projects. Total projects: ' + total + '.';
+          if (skillsMeta) skillsMeta.textContent = 'Select any skill to filter. Total projects: ' + total + '.';
 
           function setActive(btn){ badges.forEach(b => b.setAttribute('aria-pressed','false')); btn.setAttribute('aria-pressed','true'); }
           function btnLabel(slug){ const b = badges.find(x=>x.dataset.skill===slug); const t=b?.querySelectorAll('span'); return t&&t[1]?t[1].textContent.trim():slug.toUpperCase(); }
@@ -889,7 +1895,7 @@
       </script>
     </main>
 
-    <footer id='contact-footer' class="py-10 border-t border-zinc-200/60 dark:border-white/10">
+    <footer id='contact-footer' class="py-10 border-t border-zinc-200/60 dark:border-white/10 scroll-animate">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-sm text-zinc-500 flex flex-col sm:flex-row items-center justify-between gap-4">
         <p>© <span id="year"></span> <span class="name-cycle"> Khang Phuc Nguyen</span>. All rights reserved.</p>
         <nav class="flex items-center gap-5">
@@ -975,7 +1981,7 @@
         })();
       </script>
     </footer>
-  
+
     <script>
     (function(){
       const btn = document.getElementById('themeToggleMobile');
@@ -1003,7 +2009,7 @@
       const clearBtn = document.getElementById('clearFilterBtn');
 
       const featured = document.getElementById('projects') || document.querySelector('[data-section="projects"]');
-      const cards = featured ? Array.from(featured.querySelectorAll('.project-card')) : [];
+      const cards = featured ? Array.from(featured.querySelectorAll('.modern-project-card')) : [];
 
       const labels = { sql: 'SQL', python: 'Python', etl: 'ETL', viz: 'Data Viz', ml: 'Machine Learning', '*': 'All' };
 
@@ -1055,5 +2061,33 @@
       });
     })();
     </script>
+
+    <script>
+      // Desktop-only scroll animations using Intersection Observer
+      (function() {
+        if (window.isMobileDevice) return; // Skip on mobile
+
+        const observerOptions = {
+          threshold: 0.1,
+          rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('animate-in');
+              observer.unobserve(entry.target); // Animate only once
+            }
+          });
+        }, observerOptions);
+
+        // Observe all scroll-animate elements when DOM is ready
+        document.addEventListener('DOMContentLoaded', () => {
+          const animateElements = document.querySelectorAll('.scroll-animate');
+          animateElements.forEach(el => observer.observe(el));
+        });
+      })();
+    </script>
   </body>
 </html>
+
