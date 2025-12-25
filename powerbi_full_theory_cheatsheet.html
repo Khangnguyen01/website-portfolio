@@ -1,0 +1,914 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Power BI Full Theory Cheatsheet (90–100%)</title>
+  <style>
+    :root{
+      --bg:#0b1020; --panel:#101a33; --panel2:#0f1730; --text:#e8ecf6;
+      --muted:#aeb7d0; --accent:#6aa6ff; --accent2:#5ce1c6; --warn:#ffcc66;
+      --danger:#ff6b6b; --ok:#7CFFB2;
+      --border:rgba(255,255,255,.10);
+      --shadow: 0 14px 38px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(1200px 800px at 20% 10%, rgba(106,166,255,.18), transparent 60%),
+        radial-gradient(900px 600px at 80% 20%, rgba(92,225,198,.14), transparent 60%),
+        radial-gradient(800px 700px at 50% 90%, rgba(255,204,102,.08), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+    header{
+      padding:26px 18px 12px;
+      max-width:1200px;
+      margin:0 auto;
+    }
+    h1{margin:0 0 6px; font-size:26px; letter-spacing:.2px}
+    .subtitle{color:var(--muted); margin:0 0 14px; max-width: 980px}
+    .badges{display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 0}
+    .badge{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px;
+      border:1px solid var(--border);
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      color:var(--muted);
+      font-size:12px;
+    }
+    .dot{width:8px; height:8px; border-radius:999px; background:rgba(255,255,255,.18)}
+    .dot.ok{background:rgba(124,255,178,.85)}
+    .dot.info{background:rgba(106,166,255,.85)}
+    .dot.warn{background:rgba(255,204,102,.85)}
+    main{max-width:1200px; margin:0 auto; padding:10px 18px 42px}
+    .layout{display:grid; gap:12px}
+    @media(min-width:1040px){ .layout{grid-template-columns: 340px 1fr;} }
+    aside, section{
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:14px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
+    }
+    .sticky{position:sticky; top:12px; align-self:start}
+    .controls{
+      display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;
+    }
+    .search{
+      flex:1 1 220px; min-width:220px;
+      display:flex; gap:8px; align-items:center;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px 10px;
+      background:rgba(0,0,0,.18);
+    }
+    .search input{
+      width:100%;
+      border:0; outline:0;
+      background:transparent;
+      color:var(--text);
+      font-size:13px;
+    }
+    .btn{
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-size:12px;
+    }
+    .btn:hover{border-color:rgba(106,166,255,.35); background:rgba(106,166,255,.08)}
+    .btn.secondary:hover{border-color:rgba(92,225,198,.35); background:rgba(92,225,198,.08)}
+    .btn.danger:hover{border-color:rgba(255,107,107,.35); background:rgba(255,107,107,.08)}
+    .small{font-size:12px; color:var(--muted)}
+    nav a{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
+      padding:8px 10px;
+      margin:5px 0;
+      border-radius:12px;
+      text-decoration:none;
+      color:var(--text);
+      border:1px solid transparent;
+    }
+    nav a:hover{border-color:rgba(106,166,255,.35); background:rgba(106,166,255,.08)}
+    nav .count{color:var(--muted); font-size:12px}
+    h2{margin:0 0 10px; font-size:18px}
+    h3{margin:14px 0 6px; font-size:15px; color:var(--accent2)}
+    h4{margin:10px 0 6px; font-size:13px; color:var(--accent)}
+    .row{display:flex; flex-wrap:wrap; gap:10px}
+    .card{
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:12px;
+      flex:1 1 320px;
+      min-width:280px;
+    }
+    ul{margin:6px 0 0 18px}
+    li{margin:4px 0}
+    .pill{
+      display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px;
+      background:rgba(92,225,198,.10); border:1px solid rgba(92,225,198,.25);
+      color:var(--accent2); margin:2px 6px 2px 0;
+    }
+    .pill2{
+      display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px;
+      background:rgba(106,166,255,.10); border:1px solid rgba(106,166,255,.25);
+      color:var(--accent); margin:2px 6px 2px 0;
+    }
+    .pill3{
+      display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px;
+      background:rgba(255,204,102,.10); border:1px solid rgba(255,204,102,.25);
+      color:var(--warn); margin:2px 6px 2px 0;
+    }
+    .note{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(106,166,255,.25);
+      background:rgba(106,166,255,.08);
+      color:var(--text);
+    }
+    .warnbox{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,204,102,.25);
+      background:rgba(255,204,102,.08);
+      color:var(--text);
+    }
+    .dangerbox{
+      margin-top:10px;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,107,107,.25);
+      background:rgba(255,107,107,.08);
+      color:var(--text);
+    }
+    details{
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.03);
+      margin-top:10px;
+    }
+    summary{cursor:pointer; color:var(--accent); font-weight:700}
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-size:12px;
+      background:rgba(0,0,0,.25);
+      padding:2px 6px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.08);
+      white-space:nowrap;
+    }
+    mark{
+      background: rgba(255,204,102,.25);
+      color: var(--text);
+      padding: 0 2px;
+      border-radius: 4px;
+    }
+    .item[hidden]{display:none !important}
+    .hr{height:1px; background:rgba(255,255,255,.10); margin:14px 0}
+    .two-col{display:grid; gap:10px}
+    @media(min-width:980px){ .two-col{grid-template-columns:1fr 1fr;} }
+    footer{
+      max-width:1200px; margin:0 auto; padding:0 18px 30px;
+      color:var(--muted); font-size:12px;
+    }
+  </style>
+</head>
+
+<body>
+<header>
+  <h1>Power BI Full Theory Cheatsheet (90–100%)</h1>
+  <p class="subtitle">
+    Cheatsheet “full-scope” về Power BI (lý thuyết + thực hành theo checklist), tập trung vào kiến trúc, Power Query/ETL, semantic modeling,
+    visuals/UX, performance, Service/governance/security, refresh & troubleshooting. DAX chỉ được nhắc ở mức khái niệm (không liệt kê hàm/công thức).
+  </p>
+  <div class="badges">
+    <span class="badge"><span class="dot info"></span> Cấp độ: Senior interview</span>
+    <span class="badge"><span class="dot ok"></span> Checklist-driven</span>
+    <span class="badge"><span class="dot warn"></span> Thực chiến: Cost/Perf/Governance</span>
+  </div>
+</header>
+
+<main class="layout">
+  <aside class="sticky">
+    <h2>Tìm kiếm & điều hướng</h2>
+
+    <div class="controls">
+      <div class="search" title="Tìm theo từ khoá (VD: query folding, gateway, star schema, RLS)">
+        <span class="small">🔎</span>
+        <input id="searchBox" placeholder="Tìm kiếm: query folding, gateway, RLS, composite, incremental..." />
+      </div>
+      <button class="btn secondary" id="expandAll">Mở tất cả</button>
+      <button class="btn" id="collapseAll">Thu gọn</button>
+      <button class="btn danger" id="clearSearch">Xoá tìm kiếm</button>
+    </div>
+
+    <div class="hr"></div>
+
+    <nav id="toc">
+      <a href="#sec-1">1) Kiến trúc & thành phần <span class="count" data-count="sec-1"></span></a>
+      <a href="#sec-2">2) Connectivity & Storage Modes <span class="count" data-count="sec-2"></span></a>
+      <a href="#sec-3">3) Power Query / ETL (M) <span class="count" data-count="sec-3"></span></a>
+      <a href="#sec-4">4) Data Modeling (Star/Grain) <span class="count" data-count="sec-4"></span></a>
+      <a href="#sec-5">5) Relationships (Cardinality/Direction) <span class="count" data-count="sec-5"></span></a>
+      <a href="#sec-6">6) Date & Time (Role-playing) <span class="count" data-count="sec-6"></span></a>
+      <a href="#sec-7">7) Visuals, Filters, UX <span class="count" data-count="sec-7"></span></a>
+      <a href="#sec-8">8) Performance (Model/Report/Source) <span class="count" data-count="sec-8"></span></a>
+      <a href="#sec-9">9) Refresh, Gateway, Incremental <span class="count" data-count="sec-9"></span></a>
+      <a href="#sec-10">10) Security & Access <span class="count" data-count="sec-10"></span></a>
+      <a href="#sec-11">11) Service, Governance, ALM <span class="count" data-count="sec-11"></span></a>
+      <a href="#sec-12">12) Troubleshooting Playbooks <span class="count" data-count="sec-12"></span></a>
+      <a href="#sec-13">13) Interview Checklist (Senior) <span class="count" data-count="sec-13"></span></a>
+      <p class="small" style="margin:10px 0 0;">
+        Mẹo: dùng từ khoá tiếng Anh cũng ra kết quả (VD: <code>folding</code>, <code>gateway</code>, <code>RLS</code>).
+      </p>
+    </nav>
+  </aside>
+
+  <div>
+
+    <section class="item" id="sec-1" data-title="kiến trúc architecture thành phần power bi desktop service gateway report dashboard dataset semantic model thin report">
+      <h2>1) Kiến trúc & thành phần (Architecture)</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Power BI Desktop</h3>
+          <div class="small">Authoring tool: build semantic model + report</div>
+          <ul>
+            <li>Kết nối nguồn dữ liệu (connectors), transform (Power Query), modeling (relationships), tạo report visuals.</li>
+            <li>Xuất bản lên Service (publish) hoặc export (PBIX template/PBIT).</li>
+            <li>Best practice: tách <span class="pill">semantic model (dataset)</span> và <span class="pill">thin reports</span> để governance KPI.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Power BI Service</h3>
+          <div class="small">Cloud platform: host/run/govern</div>
+          <ul>
+            <li>Host semantic model, reports, dashboards, apps; quản trị refresh & credentials.</li>
+            <li>Governance: permissions, endorsement (Promoted/Certified), lineage/impact (tuỳ tenant).</li>
+            <li>Monitoring: refresh history, usage metrics, capacity metrics (Premium/Fabric).</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Gateway (On-premises)</h3>
+          <div class="small">Secure bridge to on-prem sources</div>
+          <ul>
+            <li>Bắt buộc khi Service cần truy cập nguồn on-prem (SQL Server, Oracle, file share...).</li>
+            <li>Hỗ trợ scheduled refresh (Import) và routing query (DirectQuery/Live) qua on-prem.</li>
+            <li>Ops: datasource mapping, service account, firewall/proxy, cluster HA.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Dataset / Semantic model / Report / Dashboard / App</summary>
+        <div class="two-col">
+          <div class="card">
+            <h4>Semantic model (Dataset)</h4>
+            <ul>
+              <li>Tables + relationships + metadata + business logic + security + refresh settings.</li>
+              <li>Là “single source of truth” khi được tái sử dụng bởi nhiều reports.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Report / Dashboard / App</h4>
+            <ul>
+              <li><b>Report</b>: pages + visuals; dùng để phân tích & kể chuyện dữ liệu.</li>
+              <li><b>Dashboard</b>: tiles trong Service; phù hợp monitoring.</li>
+              <li><b>App</b>: gói phát hành theo audience; giảm rối permission.</li>
+            </ul>
+          </div>
+        </div>
+      </details>
+
+      <div class="note">
+        <b>Senior mindset:</b> “Một semantic model chuẩn hoá KPI + nhiều thin reports theo audience” thường thắng “mỗi team một PBIX full”.
+      </div>
+    </section>
+
+    <section class="item" id="sec-2" data-title="connectivity storage modes import directquery live connection composite dual aggregations dataset direct lake fabric">
+      <h2>2) Connectivity & Storage Modes</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Import</h3>
+          <div class="small">VertiPaq in-memory</div>
+          <ul>
+            <li>Ưu: nhanh, concurrency tốt, trải nghiệm ổn định.</li>
+            <li>Nhược: không real-time; phụ thuộc refresh schedule; tốn memory/capacity.</li>
+            <li>Phù hợp: analytics dashboards, KPI chuẩn, mô hình phức tạp.</li>
+          </ul>
+          <div>
+            <span class="pill">Performance</span><span class="pill3">Freshness phụ thuộc refresh</span><span class="pill2">Modeling linh hoạt</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>DirectQuery</h3>
+          <div class="small">Query-on-demand to source</div>
+          <ul>
+            <li>Ưu: dữ liệu “gần thời gian thực” theo tương tác; không cần import toàn bộ.</li>
+            <li>Nhược: phụ thuộc nguồn + network; concurrency kém nếu nhiều visuals; cost theo scan (cloud DWH).</li>
+            <li>Phù hợp: yêu cầu freshness cao, data không cho import, có source đủ mạnh + report tối ưu.</li>
+          </ul>
+          <div>
+            <span class="pill3">Cost/latency risk</span><span class="pill2">Source-dependent</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>Live connection</h3>
+          <div class="small">Connect to an existing semantic model</div>
+          <ul>
+            <li>Kết nối tới semantic model đã có (SSAS/Power BI dataset).</li>
+            <li>Report “thin”: reuse KPI/security đã được governance.</li>
+            <li>Phù hợp: enterprise KPI consistency, nhiều teams cùng dùng.</li>
+          </ul>
+          <div>
+            <span class="pill">Governance</span><span class="pill2">Reuse</span>
+          </div>
+        </div>
+      </div>
+
+      <details>
+        <summary>Composite model, Dual mode, Aggregations (khái niệm + cơ chế)</summary>
+        <div class="card">
+          <ul>
+            <li><b>Composite</b>: một semantic model trộn bảng Import + DirectQuery (và thường dims là Dual).</li>
+            <li><b>Dual</b>: dimension vừa dùng in-memory để nhanh, vừa hỗ trợ join/filter khi query chạm DirectQuery.</li>
+            <li><b>Aggregations</b>: import bảng tổng hợp để trả lời 80–95% visuals; detail giữ DirectQuery cho drill-down.</li>
+            <li>Query routing: nếu visual chỉ cần aggregate grain → dùng bảng agg (Import); nếu cần cột detail → fallback DirectQuery.</li>
+          </ul>
+        </div>
+        <div class="warnbox">
+          <b>Rule of thumb:</b> Composite + Aggregations để kiểm soát “queries per click” và scale concurrency.
+        </div>
+      </details>
+
+      <details>
+        <summary>Decision framework (4 trục) để chọn mode</summary>
+        <div class="card">
+          <ul>
+            <li><b>Freshness/SLA</b>: theo giờ/ngày (Import) vs theo phút (Composite/DQ) vs centralized model (Live).</li>
+            <li><b>Concurrency</b>: nhiều người dùng → ưu tiên Import/Composite.</li>
+            <li><b>Cost model</b>: warehouse tính phí scan → tránh DQ thuần; dùng aggregates/materialized views.</li>
+            <li><b>Governance</b>: KPI consistency → shared semantic model + thin reports.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-3" data-title="power query etl m language query folding merge append data types parameters functions profiling errors staging reference native query">
+      <h2>3) Power Query / ETL (M)</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Query Folding</h3>
+          <ul>
+            <li>Power Query “pushdown” steps → native query ở nguồn (SQL) để giảm scan/cost.</li>
+            <li>Check: <span class="pill2">View Native Query</span>; xác định “last foldable step”.</li>
+            <li>Giữ folding: filter theo partition sớm, chọn cột sớm, hạn chế custom M nặng.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Merge vs Append</h3>
+          <ul>
+            <li><b>Merge</b> ≈ JOIN (gộp ngang, thêm cột), cần keys rõ ràng.</li>
+            <li><b>Append</b> ≈ UNION (gộp dọc, thêm dòng), cần schema tương thích.</li>
+            <li>Best practice: join/union nặng → làm ở warehouse (view/dbt/materialized).</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Data types & Data profiling</h3>
+          <ul>
+            <li>Set kiểu dữ liệu sớm (date/number/text) để tránh lỗi và giảm conversion runtime.</li>
+            <li>Profiling: Column quality/distribution/profile để thấy null/duplicate/outliers.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Staging / Reference pattern</summary>
+        <div class="card">
+          <ul>
+            <li>Base query: filter + select columns + rename/type cơ bản (ưu tiên fold).</li>
+            <li>Reference queries: reuse, tránh copy/paste.</li>
+            <li>Parameters: DEV/PROD switch, date range, connector configs.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Data quality & schema drift</summary>
+        <div class="card">
+          <ul>
+            <li>Dedup theo business key; log số record bị drop.</li>
+            <li>Schema drift: cột đổi tên/kiểu; thiết kế resilient steps.</li>
+            <li>Timeout: folding break → scan lớn; xử bằng filter/partition/warehouse staging.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-4" data-title="data modeling star schema snowflake grain fact dimension conformed dimensions surrogate key degenerate dimension normalization denormalization">
+      <h2>4) Data Modeling (Star/Snowflake, Grain, Dimensions)</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Grain</h3>
+          <ul>
+            <li>Định nghĩa “mỗi row fact đại diện cho gì”.</li>
+            <li>Validate grain bằng unique keys + kiểm tra duplicates.</li>
+            <li>Sai grain → double count / KPI lệch.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Star schema</h3>
+          <ul>
+            <li>Fact ở giữa, dims xung quanh → đơn giản, nhanh, ít ambiguity.</li>
+            <li>Conformed dims giúp nhiều fact dùng chung “ngôn ngữ KPI”.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Snowflake schema</h3>
+          <ul>
+            <li>Dims chuẩn hoá thành nhiều bảng → join phức tạp hơn.</li>
+            <li>Thường kém thân thiện cho Power BI nếu không có lý do governance mạnh.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Keys & dimensions patterns</summary>
+        <div class="two-col">
+          <div class="card">
+            <h4>Surrogate key</h4>
+            <ul>
+              <li>Key kỹ thuật (int) giúp ổn định, tối ưu, hỗ trợ SCD.</li>
+            </ul>
+          </div>
+          <div class="card">
+            <h4>Conformed dimension</h4>
+            <ul>
+              <li>Dimension dùng chung nhiều fact: Date/Product/Geo.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <h4>Degenerate dimension</h4>
+          <ul>
+            <li>Thuộc tính kiểu dimension nhưng để trong fact (VD: OrderNumber).</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-5" data-title="relationships cardinality one to many many to many bidirectional single both bridge table ambiguity inactive relationship">
+      <h2>5) Relationships</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Cardinality</h3>
+          <ul>
+            <li><b>1:*</b> chuẩn: dim (1) → fact (*)</li>
+            <li><b>*:*</b> rủi ro: ambiguity, double counting</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Filter direction</h3>
+          <ul>
+            <li>Ưu tiên <b>Single</b> (Dim → Fact).</li>
+            <li><b>Both</b> chỉ bật khi hiểu rõ rủi ro.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Bridge table</h3>
+          <ul>
+            <li>Giải many-to-many đúng chuẩn: bridge mapping + relationships rõ.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Common pitfalls</summary>
+        <div class="card">
+          <ul>
+            <li>Fact-to-fact relationship: thường tránh.</li>
+            <li>Nhiều đường lọc giữa 2 bảng: ambiguity.</li>
+            <li>Slicers cardinality cao: chậm, tốn query.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-6" data-title="date table time intelligence role playing fiscal calendar iso week time zone datetime continuous dates">
+      <h2>6) Date & Time</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Date table chuẩn</h3>
+          <ul>
+            <li>Contiguous dates; Year/Month/Week; fiscal nếu cần.</li>
+            <li>Mark as date table.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Role-playing dates</h3>
+          <ul>
+            <li>Multiple date columns: Order/Ship/Return → 1 date table, 1 active + nhiều inactive.</li>
+            <li>Thống nhất định nghĩa “ngày” cho KPI.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Time zones</h3>
+          <ul>
+            <li>Quy ước UTC vs local; tránh lệch ngày.</li>
+            <li>Near real-time: bucket time (1/5/15 phút) để tối ưu.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="item" id="sec-7" data-title="visuals filters slicers interactions drill down drill through tooltip bookmarks selection pane navigation accessibility">
+      <h2>7) Visuals, Filters, UX</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Filters scope</h3>
+          <ul>
+            <li>Visual / Page / Report filters.</li>
+            <li>Sync slicers giữa pages khi cần (đúng audience).</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Interactions</h3>
+          <ul>
+            <li>Edit interactions để kiểm soát cross-filter/highlight.</li>
+            <li>Giảm “queries per click” để tối ưu perf/cost.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Navigation</h3>
+          <ul>
+            <li>Drill-down, drill-through, tooltip pages.</li>
+            <li>Bookmarks + Selection pane: toggles, guided story.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Design principles</summary>
+        <div class="card">
+          <ul>
+            <li>Tách monitoring vs analysis pages.</li>
+            <li>Hạn chế visuals nặng; ưu tiên hierarchy.</li>
+            <li>Consistency: layout, formats, KPI definitions.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-8" data-title="performance tuning vertipaq cardinality columns report performance analyzer directquery optimization aggregations materialized views">
+      <h2>8) Performance</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Model levers</h3>
+          <ul>
+            <li>Giảm cột & cardinality; tránh text dài.</li>
+            <li>Chuẩn hoá schema; star schema.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Report levers</h3>
+          <ul>
+            <li>Ít visuals/page; control interactions.</li>
+            <li>Slicers: tránh high-cardinality.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Source levers</h3>
+          <ul>
+            <li>Partition/cluster/index; pre-aggregate; materialized view.</li>
+            <li>Composite + aggregations để scale.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Performance triage</summary>
+        <div class="card">
+          <ol style="margin:6px 0 0 18px;">
+            <li>Xác định chậm ở refresh hay render hay source.</li>
+            <li>Giảm queries per click.</li>
+            <li>Tối ưu model → report → source.</li>
+          </ol>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-9" data-title="refresh scheduled refresh gateway incremental refresh rangestart rangeend partitions automatic page refresh near real time hybrid tables">
+      <h2>9) Refresh, Gateway, Incremental</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Refresh</h3>
+          <ul>
+            <li>Scheduled refresh: lịch; failure handling; refresh history.</li>
+            <li>Near real-time: monitoring page + hybrid/composite patterns.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Incremental refresh</h3>
+          <ul>
+            <li>Refresh theo partitions thay vì full reload.</li>
+            <li>RangeStart/RangeEnd + policy store/refresh.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Gateway ops</h3>
+          <ul>
+            <li>Credentials, datasource mapping, network/proxy.</li>
+            <li>Cluster HA nếu mission-critical.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="item" id="sec-10" data-title="security rls ols permissions workspace roles viewer contributor member admin apps audience sharing build permissions export restrictions sensitivity labels">
+      <h2>10) Security & Access</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Workspace roles</h3>
+          <ul>
+            <li>Control content actions.</li>
+            <li>Không thay thế RLS.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>RLS</h3>
+          <ul>
+            <li>Row filtering; dynamic mapping theo user.</li>
+            <li>Test role Desktop/Service.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>OLS</h3>
+          <ul>
+            <li>Hide objects (tables/columns) nhạy cảm.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>Security testing</summary>
+        <div class="card">
+          <ul>
+            <li>Test as role; verify drill-through/export.</li>
+            <li>Validate with real users if possible.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-11" data-title="service governance deployment dev test prod app certified promoted endorsement lineage impact analysis versioning change control documentation ownership">
+      <h2>11) Service, Governance, ALM</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Workspace strategy</h3>
+          <ul>
+            <li>Dataset workspace vs report workspaces.</li>
+            <li>Dev/Test/Prod for controlled releases.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Governance</h3>
+          <ul>
+            <li>Metric ownership + change control + documentation.</li>
+            <li>Endorsement: promoted/certified.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Distribution</h3>
+          <ul>
+            <li>Apps theo audience; reduce workspace exposure.</li>
+          </ul>
+        </div>
+      </div>
+
+      <details>
+        <summary>ALM checklist</summary>
+        <div class="card">
+          <ul>
+            <li>PR review cho KPI changes; release notes.</li>
+            <li>Regression tests: totals, refresh runtime, security.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-12" data-title="troubleshooting refresh failed gateway offline credentials schema drift timeout numbers dont match double counting many to many performance slow report triage">
+      <h2>12) Troubleshooting Playbooks</h2>
+
+      <details open>
+        <summary>Refresh failed</summary>
+        <div class="card">
+          <ul>
+            <li>Credentials expired / permission changes.</li>
+            <li>Gateway offline / mapping.</li>
+            <li>Schema drift; timeout due to scan.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Numbers don’t match</summary>
+        <div class="card">
+          <ul>
+            <li>Grain mismatch, join dup, many-to-many issues.</li>
+            <li>Date definition/timezone mismatch.</li>
+          </ul>
+        </div>
+      </details>
+
+      <details>
+        <summary>Report slow</summary>
+        <div class="card">
+          <ul>
+            <li>Too many visuals/interactions; DQ cost; model heavy.</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <section class="item" id="sec-13" data-title="interview checklist senior power bi questions architecture etl modeling performance service governance security refresh scenarios">
+      <h2>13) Interview Checklist (Senior)</h2>
+
+      <div class="row">
+        <div class="card">
+          <h3>Core mastery</h3>
+          <ul>
+            <li>Mode selection (4 axes) + composite + aggregations.</li>
+            <li>Query folding + incremental refresh.</li>
+            <li>Star schema + grain + relationship pitfalls.</li>
+            <li>Security (roles vs RLS/OLS) + governance.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Scenario questions</h3>
+          <ul>
+            <li>500 users concurrency, near real-time, warehouse cost → design pattern.</li>
+            <li>KPI lệch giữa teams → semantic model + ALM.</li>
+            <li>Refresh timeout → folding + partition + staging.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Operational excellence</h3>
+          <ul>
+            <li>Incident playbook; monitoring; rollback; docs.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="warnbox">
+        <b>Luyện tập nhanh:</b> Mỗi mục trả lời 4 câu: định nghĩa, khi nào dùng, rủi ro, cách kiểm chứng.
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <p><b>Ghi chú:</b> Bạn yêu cầu “lý thuyết 90–100%” và có tìm kiếm. File này tập trung theory + ops + governance. Nếu bạn muốn thêm một file HTML riêng cho DAX (core→advanced + bài tập), mình có thể tạo ngay.</p>
+</footer>
+
+<script>
+(function(){
+  const searchBox = document.getElementById('searchBox');
+  const clearBtn = document.getElementById('clearSearch');
+  const expandBtn = document.getElementById('expandAll');
+  const collapseBtn = document.getElementById('collapseAll');
+  const items = Array.from(document.querySelectorAll('.item'));
+  const detailsEls = Array.from(document.querySelectorAll('details'));
+  const tocCounts = Array.from(document.querySelectorAll('[data-count]'));
+
+  function stripMarks(el){
+    const marks = el.querySelectorAll('mark');
+    marks.forEach(m=>{
+      const text = document.createTextNode(m.textContent);
+      m.replaceWith(text);
+    });
+  }
+
+  function escapeRe(s){
+    return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  function highlight(el, term){
+    stripMarks(el);
+    if(!term) return;
+    const re = new RegExp(escapeRe(term), 'ig');
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT, null);
+    const nodes = [];
+    while(walker.nextNode()) nodes.push(walker.currentNode);
+
+    for(const node of nodes){
+      const val = node.nodeValue;
+      if(!val || !re.test(val)) continue;
+      re.lastIndex = 0;
+      const frag = document.createDocumentFragment();
+      let lastIndex = 0;
+      let match;
+      while((match = re.exec(val)) !== null){
+        const start = match.index;
+        const end = start + match[0].length;
+        frag.appendChild(document.createTextNode(val.slice(lastIndex, start)));
+        const mark = document.createElement('mark');
+        mark.textContent = val.slice(start, end);
+        frag.appendChild(mark);
+        lastIndex = end;
+      }
+      frag.appendChild(document.createTextNode(val.slice(lastIndex)));
+      node.parentNode.replaceChild(frag, node);
+    }
+  }
+
+  function updateCounts(){
+    tocCounts.forEach(span=>{
+      const id = span.getAttribute('data-count');
+      const sec = document.getElementById(id);
+      if(!sec) return;
+      span.textContent = sec.hidden ? '' : '•';
+    });
+  }
+
+  function applySearch(){
+    const q = (searchBox.value || '').trim().toLowerCase();
+    items.forEach(sec=>{
+      stripMarks(sec);
+      const hay = ((sec.getAttribute('data-title') || '') + ' ' + (sec.textContent || '')).toLowerCase();
+      const match = !q || hay.includes(q);
+      sec.hidden = !match;
+      if(match && q) highlight(sec, q);
+    });
+    updateCounts();
+  }
+
+  clearBtn.addEventListener('click', ()=>{
+    searchBox.value = '';
+    applySearch();
+    searchBox.focus();
+  });
+
+  expandBtn.addEventListener('click', ()=>{
+    detailsEls.forEach(d=>d.open = true);
+  });
+
+  collapseBtn.addEventListener('click', ()=>{
+    detailsEls.forEach(d=>d.open = false);
+    const t = document.querySelector('#sec-12 details');
+    if(t) t.open = true;
+  });
+
+  searchBox.addEventListener('input', applySearch);
+  updateCounts();
+})();
+</script>
+</body>
+</html>
