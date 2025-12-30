@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Data Modelling Cheatsheet — Dimensional / DW / Analytics Engineering</title>
+  <style>
+    :root{
+      --bg:#0b0f19; --card:#111827; --muted:#9ca3af; --text:#e5e7eb; --accent:#a78bfa;
+      --border:#1f2937; --code:#0a1222; --good:#34d399; --warn:#fbbf24;
+    }
+    html,body{background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:0;}
+    a{color:var(--accent); text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 18px 80px;}
+    .top{display:flex; gap:16px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;}
+    h1{font-size:28px; margin:0 0 6px;}
+    .sub{color:var(--muted); margin:0 0 14px; line-height:1.5;}
+    .bar{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+    .search{
+      flex:1; min-width:260px; background:var(--card); border:1px solid var(--border);
+      border-radius:12px; padding:10px 12px; color:var(--text);
+    }
+    .pill{border:1px solid var(--border); background:rgba(167,139,250,.08); color:var(--text);
+      padding:8px 10px; border-radius:999px; font-size:12px;}
+    .grid{display:grid; grid-template-columns: 320px 1fr; gap:16px; margin-top:16px;}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
+    .toc{position:sticky; top:14px; align-self:start; background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px;}
+    .toc h3{margin:0 0 10px; font-size:14px; color:var(--muted); letter-spacing:.02em; text-transform:uppercase;}
+    .toc a{display:block; padding:6px 8px; border-radius:10px; font-size:13px; color:var(--text);}
+    .toc a:hover{background:rgba(167,139,250,.08); text-decoration:none;}
+    .content{display:flex; flex-direction:column; gap:14px;}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px;}
+    h2{margin:0 0 10px; font-size:18px;}
+    h3{margin:14px 0 8px; font-size:15px;}
+    .muted{color:var(--muted);}
+    pre{background:var(--code); border:1px solid var(--border); border-radius:14px; padding:12px; overflow:auto; margin:10px 0;}
+    code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px;}
+    table{width:100%; border-collapse:collapse; margin-top:10px; overflow:hidden; border-radius:12px;}
+    th,td{border-bottom:1px solid var(--border); padding:10px 10px; vertical-align:top; font-size:13px;}
+    th{color:var(--muted); text-align:left; font-weight:600; background:rgba(255,255,255,.02);}
+    .note{border-left:3px solid var(--accent); padding:10px 12px; background:rgba(167,139,250,.06); border-radius:12px; color:var(--text); margin-top:10px;}
+    .warn{border-left-color:var(--warn); background:rgba(251,191,36,.07);}
+    .good{border-left-color:var(--good); background:rgba(52,211,153,.07);}
+    .hide{display:none !important;}
+    .k{display:inline-block; padding:2px 7px; border:1px solid var(--border); border-radius:999px; font-size:12px; color:var(--muted); margin-left:6px;}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <div>
+      <h1>Data Modelling Cheatsheet — Basic → Advanced</h1>
+      <p class="sub">Tập trung Dimensional Modelling (Kimball) + các khái niệm DW thực chiến: grain, keys, SCD, conformed dim, bridge, junk/degenerate, fact types, data quality.</p>
+      <div class="bar">
+        <input id="q" class="search" placeholder="Tìm nhanh (ví dụ: grain, SCD2, surrogate key, conformed, bridge, snapshot, junk, degenerate, bus matrix)"/>
+        <span class="pill">Interview-ready</span>
+        <span class="pill">Ví dụ game/app analytics</span>
+      </div>
+    </div>
+    <div class="pill">v1.0 • offline HTML</div>
+  </div>
+
+  <div class="grid">
+    <nav class="toc">
+      <h3>Mục lục</h3>
+      <a href="#core">1) Core concepts</a>
+      <a href="#keys">2) Keys & grain</a>
+      <a href="#star">3) Star vs Snowflake</a>
+      <a href="#facts">4) Fact table types</a>
+      <a href="#scd">5) SCD (Type 0/1/2/3/6)</a>
+      <a href="#dims">6) Dimension patterns</a>
+      <a href="#bridge">7) Many-to-many & Bridge</a>
+      <a href="#conformed">8) Conformed dimensions</a>
+      <a href="#busmatrix">9) Bus matrix</a>
+      <a href="#layers">10) Data layers (bronze/silver/gold)</a>
+      <a href="#dq">11) Data quality & testing</a>
+      <a href="#example">12) Example schema (game/app)</a>
+      <a href="#interview">13) Interview checklist</a>
+    </nav>
+
+    <main class="content" id="content">
+
+      <section class="card" id="core">
+        <h2>1) Core concepts <span class="k">Must-know</span></h2>
+        <table>
+          <thead><tr><th>Khái niệm</th><th>Định nghĩa ngắn</th><th>Bẫy thường gặp</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Dimensional modelling</td>
+              <td>Mô hình fact/dimension tối ưu cho analytics (slice/dice, drill-down)</td>
+              <td>Đặt attribute “lặp lại” vào fact làm phình bảng & khó maintain.</td>
+            </tr>
+            <tr>
+              <td>OLTP vs OLAP</td>
+              <td>OLTP: transaction/write-heavy; OLAP: analytics/read-heavy</td>
+              <td>Đừng nhầm “DWH enforce PK/FK như OLTP” — thường validate bằng tests.</td>
+            </tr>
+            <tr>
+              <td>Business process</td>
+              <td>Một quy trình cần đo: purchase, ad_impression, session, level_attempt...</td>
+              <td>Mỗi process thường tương ứng một fact riêng (trừ khi unified event fact).</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" id="keys">
+        <h2>2) Keys & Grain <span class="k">Foundation</span></h2>
+
+        <h3>Grain (Granularity)</h3>
+        <div class="note good">
+          <b>Grain</b> là “mỗi row đại diện cho cái gì” và “unique theo keys nào”. Không phụ thuộc bạn GROUP BY trong query.
+        </div>
+<pre><code>Ví dụ grain:
+- fact_events: 1 row / event occurrence (unique: event_id)
+- fact_user_daily: 1 row / user / day (unique: user_id + date)
+- fact_campaign_daily: 1 row / campaign / day</code></pre>
+
+        <h3>Natural key vs Surrogate key</h3>
+        <table>
+          <thead><tr><th>Loại key</th><th>Ví dụ</th><th>Dùng để làm gì</th></tr></thead>
+          <tbody>
+            <tr><td>Natural Key (NK)</td><td>user_id, product_id, campaign_id</td><td>Đến từ source, có ý nghĩa business</td></tr>
+            <tr><td>Surrogate Key (SK)</td><td>user_sk (INT/UUID)</td><td>PK cho dimension, hỗ trợ SCD2, join nhanh/ổn định</td></tr>
+          </tbody>
+        </table>
+        <div class="note warn">
+          <b>Interview tip:</b> SK không phải “tạo ra khi data thay đổi”; SK là key DW sinh ra. Với SCD2, mỗi version của một NK sẽ có SK khác nhau.
+        </div>
+      </section>
+
+      <section class="card" id="star">
+        <h2>3) Star schema vs Snowflake schema</h2>
+        <table>
+          <thead><tr><th>Tiêu chí</th><th>Star</th><th>Snowflake</th></tr></thead>
+          <tbody>
+            <tr><td>Chuẩn hóa</td><td>Denormalized dims</td><td>Normalized dims (dims tách nhỏ)</td></tr>
+            <tr><td>Hiệu năng BI</td><td>Thường tốt (ít join)</td><td>Có thể chậm hơn (nhiều join)</td></tr>
+            <tr><td>Maintain</td><td>Đơn giản cho analytics</td><td>Phức tạp hơn, nhưng giảm trùng lặp</td></tr>
+          </tbody>
+        </table>
+        <div class="note">
+          <b>Rule:</b> Analytics/Power BI thường ưu tiên Star. Snowflake chỉ dùng khi hierarchy phức tạp hoặc dims cực lớn cần chuẩn hóa.
+        </div>
+      </section>
+
+      <section class="card" id="facts">
+        <h2>4) Fact table types</h2>
+        <table>
+          <thead><tr><th>Loại fact</th><th>Định nghĩa</th><th>Ví dụ game/app</th><th>Grain</th></tr></thead>
+          <tbody>
+            <tr>
+              <td>Transaction fact</td>
+              <td>1 row / transaction/event</td>
+              <td>fact_iap_transactions, fact_ad_impressions, fact_events</td>
+              <td>event_id / transaction_id</td>
+            </tr>
+            <tr>
+              <td>Periodic snapshot fact</td>
+              <td>Chụp metric theo chu kỳ (daily/weekly)</td>
+              <td>fact_user_daily_metrics (sessions, revenue, playtime)</td>
+              <td>user_id + date</td>
+            </tr>
+            <tr>
+              <td>Accumulating snapshot fact</td>
+              <td>Theo dõi process nhiều bước, update dần</td>
+              <td>fact_user_onboarding (install_ts, tutorial_complete_ts, first_purchase_ts)</td>
+              <td>user_id (hoặc journey_id)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="card" id="scd">
+        <h2>5) Slowly Changing Dimension (SCD)</h2>
+        <table>
+          <thead><tr><th>Type</th><th>Mục tiêu</th><th>Cách làm</th><th>Khi dùng</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td>Không đổi</td><td>Never update</td><td>Ngày sinh (nếu tin cậy), ngày install</td></tr>
+            <tr><td>1</td><td>Current state</td><td>Overwrite attribute</td><td>Sửa lỗi chính tả, cập nhật “current profile”</td></tr>
+            <tr><td>2</td><td>Giữ lịch sử</td><td>New row per change + effective dates + is_current</td><td>Tier/VIP, subscription status, home_country (as-of)</td></tr>
+            <tr><td>3</td><td>Giữ 1 phần lịch sử</td><td>Thêm cột prev_value</td><td>Chỉ cần current + previous</td></tr>
+            <tr><td>6</td><td>Hybrid 1+2+3</td><td>Type2 + current cols + prev cols</td><td>Case cần cả as-of + current fast filter</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Template SCD2 columns</h3>
+<pre><code>dim_user_scd2:
+- user_sk (PK, surrogate)
+- user_id (NK)
+- country
+- effective_start_ts
+- effective_end_ts
+- is_current</code></pre>
+
+        <div class="note warn">
+          <b>Bẫy:</b> SCD là kỹ thuật cho <i>dimension</i>, không phải “SCD cho fact”. Fact thường append; “as-of” thường giải bằng join fact_ts với dim_scd2 hiệu lực.
+        </div>
+      </section>
+
+      <section class="card" id="dims">
+        <h2>6) Dimension patterns</h2>
+
+        <h3>Role-playing dimension</h3>
+        <p class="muted">Một dim dùng cho nhiều vai trò: <code>dim_date</code> đóng vai <code>install_date</code>, <code>purchase_date</code>, <code>session_date</code>...</p>
+
+        <h3>Degenerate dimension</h3>
+        <div class="note good">
+          <b>Degenerate dimension</b>: business identifier nằm ngay trong fact (không có dim table riêng vì không có descriptive attributes).
+        </div>
+<pre><code>fact_iap_transactions:
+- transaction_id (degenerate dim)
+- user_sk, date_sk, product_sk
+- revenue</code></pre>
+
+        <h3>Junk dimension</h3>
+        <div class="note">
+          <b>Junk dim</b>: gom nhiều flags/low-cardinality attributes thành 1 dim (ví dụ: is_tutorial, ad_format, is_rewarded, is_test_user...)
+        </div>
+
+        <h3>Mini dimension</h3>
+        <p class="muted">Tách một nhóm attribute thay đổi nhanh (ví dụ user behavioral tier) khỏi dim_user lớn để update nhẹ nhàng.</p>
+      </section>
+
+      <section class="card" id="bridge">
+        <h2>7) Many-to-many & Bridge</h2>
+        <div class="note warn">
+          <b>Nguy cơ:</b> Join fact ↔ multi-label segment trực tiếp sẽ <b>double count</b>.
+        </div>
+
+        <h3>Pattern chuẩn</h3>
+<pre><code>dim_segment(segment_sk, segment_name, ...)
+
+bridge_user_segment(user_sk, segment_sk, as_of_date, allocation_weight)
+
+fact_user_daily_revenue(user_sk, date, revenue)</code></pre>
+
+        <h3>Attribution (Option B) để không double count</h3>
+<pre><code>SELECT
+  b.as_of_date,
+  s.segment_name,
+  SUM(f.revenue * b.allocation_weight) AS attributed_revenue
+FROM fact_user_daily_revenue f
+JOIN bridge_user_segment b
+  ON f.user_sk = b.user_sk AND f.date = b.as_of_date
+JOIN dim_segment s
+  ON b.segment_sk = s.segment_sk
+GROUP BY 1, 2;</code></pre>
+
+        <div class="note">
+          <b>Option A (executive):</b> tạo <code>user_primary_segment_daily</code> (mutual exclusive) để tổng segment = total revenue, dễ giải thích.
+        </div>
+      </section>
+
+      <section class="card" id="conformed">
+        <h2>8) Conformed dimensions</h2>
+        <div class="note good">
+          <b>Conformed dimension</b> là dimension dùng chung (cùng meaning/key/hierarchy) cho nhiều facts → drill-across nhất quán.
+        </div>
+        <ul>
+          <li><code>dim_date</code> dùng chung cho purchase/ad/session facts</li>
+          <li><code>dim_campaign</code> dùng chung cho spend fact và revenue facts (ROAS)</li>
+          <li><code>dim_country</code> dùng chung cho toàn bộ report</li>
+        </ul>
+      </section>
+
+      <section class="card" id="busmatrix">
+        <h2>9) Bus matrix (Kimball)</h2>
+        <p class="muted">Bảng mapping <b>Business Process</b> × <b>Dimensions</b>. Dùng để đảm bảo conformed dims và scope data mart.</p>
+<pre><code>Process \ Dim     Date   User   Country  Campaign  Product  Placement
+--------------------------------------------------------------------
+Purchases         X      X      X        X         X        (iap_slot)
+Ad Impressions    X      X      X        X         -        X
+Sessions          X      X      X        X         -        -
+Level Attempts    X      X      X        X         -        (level)</code></pre>
+      </section>
+
+      <section class="card" id="layers">
+        <h2>10) Data layers (Bronze/Silver/Gold) / Staging → Mart</h2>
+        <table>
+          <thead><tr><th>Layer</th><th>Mục tiêu</th><th>Ví dụ</th></tr></thead>
+          <tbody>
+            <tr><td>Bronze / Raw</td><td>Ingest nguyên bản</td><td>raw_events (JSON, nested)</td></tr>
+            <tr><td>Silver / Clean</td><td>Chuẩn hóa schema, type, dedup, flatten</td><td>stg_events_flatten</td></tr>
+            <tr><td>Gold / Mart</td><td>Business-ready metrics</td><td>mart_user_daily_kpi, mart_roas_cohort</td></tr>
+          </tbody>
+        </table>
+        <div class="note">
+          <b>Tip:</b> Đẩy business logic vào mart để Power BI “consume”, tránh phân tán logic ở Power Query.
+        </div>
+      </section>
+
+      <section class="card" id="dq">
+        <h2>11) Data quality & testing</h2>
+        <ul>
+          <li><b>Uniqueness</b>: event_id unique, user_id+date unique (tùy grain)</li>
+          <li><b>Not null</b>: keys bắt buộc</li>
+          <li><b>Referential integrity</b>: fact.user_sk phải tồn tại trong dim_user</li>
+          <li><b>Freshness</b>: data delay SLA</li>
+          <li><b>Anomaly</b>: volume/revenue spikes (dbt tests, elementary)</li>
+        </ul>
+      </section>
+
+      <section class="card" id="example">
+        <h2>12) Example star schema (game/app)</h2>
+<pre><code>dim_date(date_sk, date, week, month, year, ...)
+dim_user(user_sk, user_id, install_date, platform, ...)
+dim_country(country_sk, country_code, region, ...)
+dim_campaign(campaign_sk, network, campaign, adset, creative, ...)
+dim_product(product_sk, sku, pack_name, price_tier, ...)
+dim_event_flags(flags_sk, is_tutorial, ad_format, is_rewarded, ...)
+
+fact_events(event_id, user_sk, date_sk, campaign_sk, country_sk, flags_sk,
+           event_name, level, revenue, event_ts)
+
+fact_marketing_spend(date_sk, campaign_sk, country_sk, cost)</code></pre>
+
+        <div class="note warn">
+          <b>Country modelling:</b> tách <code>event_country</code> (fact attribute) vs <code>user_home_country</code> (dim, có thể SCD2) tùy định nghĩa business.
+        </div>
+      </section>
+
+      <section class="card" id="interview">
+        <h2>13) Interview checklist</h2>
+        <ul>
+          <li>Luôn bắt đầu bằng <b>grain</b> trước khi join/aggregate.</li>
+          <li>Giải thích rõ NK vs SK; vì sao SCD2 cần SK.</li>
+          <li>Phân biệt transaction vs snapshot facts.</li>
+          <li>Conformed dimensions để drill-across (ROAS = spend vs revenue).</li>
+          <li>Many-to-many: bridge + (primary segment hoặc weights) để tránh double count.</li>
+          <li>Junk vs degenerate: cái nào join dim, cái nào nằm thẳng trong fact.</li>
+        </ul>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script>
+  const q = document.getElementById('q');
+  const sections = [...document.querySelectorAll('#content section.card')];
+  function norm(s){ return (s||'').toLowerCase(); }
+  q.addEventListener('input', () => {
+    const term = norm(q.value).trim();
+    if(!term){
+      sections.forEach(s => s.classList.remove('hide'));
+      return;
+    }
+    sections.forEach(s => {
+      const text = norm(s.innerText);
+      s.classList.toggle('hide', !text.includes(term));
+    });
+  });
+</script>
+</body>
+</html>

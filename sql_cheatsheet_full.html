@@ -1,0 +1,590 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>SQL Cheatsheet (DDL/DML/Functions/Window) — Basic → Advanced</title>
+  <style>
+    :root{
+      --bg:#0b0f19; --card:#111827; --muted:#9ca3af; --text:#e5e7eb; --accent:#60a5fa;
+      --border:#1f2937; --code:#0a1222; --good:#34d399; --warn:#fbbf24;
+    }
+    html,body{background:var(--bg); color:var(--text); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial; margin:0;}
+    a{color:var(--accent); text-decoration:none;}
+    a:hover{text-decoration:underline;}
+    .wrap{max-width:1100px; margin:0 auto; padding:28px 18px 80px;}
+    .top{display:flex; gap:16px; align-items:flex-start; justify-content:space-between; flex-wrap:wrap;}
+    h1{font-size:28px; margin:0 0 6px;}
+    .sub{color:var(--muted); margin:0 0 14px; line-height:1.5;}
+    .bar{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+    .search{
+      flex:1; min-width:260px; background:var(--card); border:1px solid var(--border);
+      border-radius:12px; padding:10px 12px; color:var(--text);
+    }
+    .pill{border:1px solid var(--border); background:rgba(96,165,250,.08); color:var(--text);
+      padding:8px 10px; border-radius:999px; font-size:12px;}
+    .grid{display:grid; grid-template-columns: 320px 1fr; gap:16px; margin-top:16px;}
+    @media (max-width: 980px){ .grid{grid-template-columns:1fr;} }
+    .toc{position:sticky; top:14px; align-self:start; background:var(--card); border:1px solid var(--border); border-radius:16px; padding:14px;}
+    .toc h3{margin:0 0 10px; font-size:14px; color:var(--muted); letter-spacing:.02em; text-transform:uppercase;}
+    .toc a{display:block; padding:6px 8px; border-radius:10px; font-size:13px; color:var(--text);}
+    .toc a:hover{background:rgba(96,165,250,.08); text-decoration:none;}
+    .content{display:flex; flex-direction:column; gap:14px;}
+    .card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:16px;}
+    h2{margin:0 0 10px; font-size:18px;}
+    h3{margin:14px 0 8px; font-size:15px;}
+    .muted{color:var(--muted);}
+    .k{display:inline-block; padding:2px 7px; border:1px solid var(--border); border-radius:999px; font-size:12px; color:var(--muted); margin-left:6px;}
+    .two{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+    @media (max-width: 860px){ .two{grid-template-columns:1fr;} }
+    pre{background:var(--code); border:1px solid var(--border); border-radius:14px; padding:12px; overflow:auto; margin:10px 0;}
+    code{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px;}
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center;}
+    .btn{
+      cursor:pointer; border:1px solid var(--border); background:rgba(255,255,255,.03);
+      color:var(--text); padding:7px 10px; border-radius:10px; font-size:12px;
+    }
+    .btn:hover{border-color:rgba(96,165,250,.7);}
+    .note{border-left:3px solid var(--accent); padding:10px 12px; background:rgba(96,165,250,.06); border-radius:12px; color:var(--text); margin-top:10px;}
+    .warn{border-left-color:var(--warn); background:rgba(251,191,36,.07);}
+    .good{border-left-color:var(--good); background:rgba(52,211,153,.07);}
+    table{width:100%; border-collapse:collapse; margin-top:10px; overflow:hidden; border-radius:12px;}
+    th,td{border-bottom:1px solid var(--border); padding:10px 10px; vertical-align:top; font-size:13px;}
+    th{color:var(--muted); text-align:left; font-weight:600; background:rgba(255,255,255,.02);}
+    tr:hover td{background:rgba(255,255,255,.01);}
+    .tag{font-size:11px; padding:2px 6px; border:1px solid var(--border); border-radius:999px; color:var(--muted); margin-left:6px;}
+    .foot{margin-top:18px; color:var(--muted); font-size:12px;}
+    .hide{display:none !important;}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>SQL Cheatsheet — DDL, DML, Functions, Window (Basic → Advanced)</h1>
+        <p class="sub">Tập trung chuẩn ANSI SQL, có ghi chú khác biệt phổ biến (Postgres/MySQL/SQL Server/BigQuery). Dùng để ôn phỏng vấn + làm việc thực tế.</p>
+        <div class="bar">
+          <input id="q" class="search" placeholder="Tìm nhanh (ví dụ: QUALIFY, MERGE, SUMX, window frame, JSON, PIVOT, SCD, dedup)"/>
+          <span class="pill">Cú pháp minh hoạ</span>
+          <span class="pill">Mẹo tối ưu & bẫy thường gặp</span>
+        </div>
+      </div>
+      <div class="pill">v1.0 • offline HTML • copy code</div>
+    </div>
+
+    <div class="grid">
+      <nav class="toc" id="toc">
+        <h3>Mục lục</h3>
+        <a href="#basics">1) Cấu trúc query & thứ tự xử lý</a>
+        <a href="#ddl">2) DDL (CREATE/ALTER/DROP)</a>
+        <a href="#dml">3) DML (SELECT/INSERT/UPDATE/DELETE/MERGE)</a>
+        <a href="#joins">4) JOIN & set operators</a>
+        <a href="#agg">5) Aggregate & GROUP BY</a>
+        <a href="#window">6) Window functions</a>
+        <a href="#string">7) String functions</a>
+        <a href="#date">8) Date/Time functions</a>
+        <a href="#null">9) NULL handling & conditional</a>
+        <a href="#math">10) Numeric/Math</a>
+        <a href="#json">11) JSON / Semi-structured</a>
+        <a href="#array">12) Arrays & UNNEST</a>
+        <a href="#pivot">13) PIVOT/UNPIVOT</a>
+        <a href="#cte">14) CTE & Recursive</a>
+        <a href="#perf">15) Performance patterns</a>
+        <a href="#quality">16) Data quality & dedup patterns</a>
+        <a href="#interview">17) Interview “gotchas”</a>
+      </nav>
+
+      <main class="content" id="content">
+
+        <section class="card" id="basics">
+          <div class="row">
+            <h2>1) Cấu trúc query & thứ tự xử lý <span class="k">Core</span></h2>
+            <button class="btn" data-copy="#basics-sql">Copy snippet</button>
+          </div>
+          <p class="muted">Nắm “logical query processing order” để giải thích WHERE/HAVING/QUALIFY, window frames, và debug kết quả.</p>
+<pre id="basics-sql"><code>-- Logical processing (khái quát)
+FROM / JOIN
+WHERE
+GROUP BY
+HAVING
+WINDOW (analytic functions)
+QUALIFY   -- BigQuery/Snowflake
+SELECT
+ORDER BY
+LIMIT</code></pre>
+          <div class="note good">
+            <b>Tip:</b> Nếu có tie trong ORDER BY của window, hãy thêm tie-breaker (ví dụ event_id) để deterministic.
+          </div>
+        </section>
+
+        <section class="card" id="ddl">
+          <div class="row">
+            <h2>2) DDL — CREATE / ALTER / DROP <span class="k">Basic → Advanced</span></h2>
+            <button class="btn" data-copy="#ddl-sql">Copy templates</button>
+          </div>
+          <div class="two">
+            <div>
+              <h3>Create objects</h3>
+<pre id="ddl-sql"><code>-- TABLE (ANSI-ish)
+CREATE TABLE schema.table_name (
+  id         BIGINT PRIMARY KEY,
+  name       VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- VIEW
+CREATE VIEW schema.v_name AS
+SELECT ...;
+
+-- MATERIALIZED VIEW (varies by DB)
+CREATE MATERIALIZED VIEW schema.mv_name AS
+SELECT ...;
+
+-- INDEX (OLTP engines)
+CREATE INDEX idx_table_col ON schema.table_name(col);</code></pre>
+              <p class="muted">BigQuery: dùng <span class="tag">PARTITION BY</span>, <span class="tag">CLUSTER BY</span> thay “index” cổ điển.</p>
+            </div>
+            <div>
+              <h3>Alter / Drop</h3>
+<pre><code>-- ADD / DROP COLUMN
+ALTER TABLE schema.table_name ADD COLUMN new_col STRING;
+ALTER TABLE schema.table_name DROP COLUMN old_col;
+
+-- RENAME (varies by DB)
+ALTER TABLE schema.table_name RENAME TO new_name;
+
+-- DROP
+DROP TABLE IF EXISTS schema.table_name;
+DROP VIEW IF EXISTS schema.v_name;</code></pre>
+              <div class="note warn">
+                <b>BigQuery note:</b> Partition/cluster là “physical layout”; thay đổi có thể yêu cầu recreate table (tùy thao tác).
+              </div>
+            </div>
+          </div>
+
+          <h3>Constraints (OLTP vs Analytics)</h3>
+          <table>
+            <thead><tr><th>Constraint</th><th>Dùng khi nào</th><th>Ghi chú</th></tr></thead>
+            <tbody>
+              <tr><td>PRIMARY KEY / UNIQUE</td><td>Đảm bảo uniqueness</td><td>DWH/cloud thường không enforce cứng như OLTP; dùng test (dbt) thay thế.</td></tr>
+              <tr><td>FOREIGN KEY</td><td>Ràng buộc tham chiếu</td><td>Trong star schema, quan trọng về mặt logic; enforcement tùy engine.</td></tr>
+              <tr><td>NOT NULL / CHECK</td><td>Data quality</td><td>OLTP enforce mạnh; analytics ưu tiên ingestion rồi validate.</td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card" id="dml">
+          <div class="row">
+            <h2>3) DML — SELECT / INSERT / UPDATE / DELETE / MERGE <span class="k">Core</span></h2>
+            <button class="btn" data-copy="#dml-sql">Copy</button>
+          </div>
+<pre id="dml-sql"><code>-- SELECT
+SELECT col1, col2
+FROM t
+WHERE condition
+GROUP BY col1
+HAVING SUM(col2) &gt; 10
+ORDER BY col1
+LIMIT 100;
+
+-- INSERT
+INSERT INTO t (col1, col2) VALUES (1, 'a');
+
+-- UPDATE
+UPDATE t SET col2 = 'b' WHERE col1 = 1;
+
+-- DELETE
+DELETE FROM t WHERE col1 = 1;
+
+-- MERGE / UPSERT (ANSI-ish, varies)
+MERGE INTO target T
+USING source S
+ON T.key = S.key
+WHEN MATCHED THEN UPDATE SET col = S.col
+WHEN NOT MATCHED THEN INSERT (key, col) VALUES (S.key, S.col);</code></pre>
+
+          <div class="note">
+            <b>BigQuery:</b> hỗ trợ <code>MERGE</code> và <code>QUALIFY</code>. Để incremental + late-arriving, thường dùng <code>lookback window</code> + <code>MERGE</code> hoặc <code>insert_overwrite</code>.
+          </div>
+        </section>
+
+        <section class="card" id="joins">
+          <h2>4) JOIN & Set Operators</h2>
+          <div class="two">
+            <div>
+              <h3>JOIN types</h3>
+<pre><code>-- INNER
+SELECT * FROM a INNER JOIN b ON a.id = b.id;
+
+-- LEFT / RIGHT / FULL
+SELECT * FROM a LEFT JOIN b ON a.id = b.id;
+SELECT * FROM a FULL OUTER JOIN b ON a.id = b.id;
+
+-- CROSS
+SELECT * FROM a CROSS JOIN b;
+
+-- SEMI/ANTI (pattern)
+-- SEMI: keep a rows with match in b
+SELECT a.* FROM a WHERE EXISTS (SELECT 1 FROM b WHERE b.id = a.id);
+-- ANTI: keep a rows with NO match in b
+SELECT a.* FROM a WHERE NOT EXISTS (SELECT 1 FROM b WHERE b.id = a.id);</code></pre>
+            </div>
+            <div>
+              <h3>Set operators</h3>
+<pre><code>-- UNION removes duplicates; UNION ALL keeps all
+SELECT ... FROM t1
+UNION ALL
+SELECT ... FROM t2;
+
+-- INTERSECT / EXCEPT (varies)
+SELECT ... FROM t1
+INTERSECT
+SELECT ... FROM t2;
+
+SELECT ... FROM t1
+EXCEPT
+SELECT ... FROM t2;</code></pre>
+              <div class="note warn">
+                <b>Gotcha:</b> Dùng <code>UNION</code> (distinct) có thể tốn tài nguyên; ưu tiên <code>UNION ALL</code> nếu có thể.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="agg">
+          <h2>5) Aggregate & GROUP BY</h2>
+          <table>
+            <thead><tr><th>Hàm</th><th>Mô tả</th><th>Ví dụ</th></tr></thead>
+            <tbody>
+              <tr><td>COUNT(*) / COUNT(col)</td><td>Đếm dòng / đếm non-NULL</td><td><code>COUNT(*)</code>, <code>COUNT(user_id)</code></td></tr>
+              <tr><td>SUM / AVG / MIN / MAX</td><td>Tổng / TB / min / max</td><td><code>SUM(revenue)</code></td></tr>
+              <tr><td>COUNT(DISTINCT)</td><td>Đếm distinct</td><td><code>COUNT(DISTINCT user_id)</code></td></tr>
+              <tr><td>APPROX_COUNT_DISTINCT</td><td>Distinct xấp xỉ (nhanh)</td><td><code>APPROX_COUNT_DISTINCT(user_id)</code></td></tr>
+              <tr><td>STRING_AGG / GROUP_CONCAT</td><td>Nối chuỗi theo group</td><td><code>STRING_AGG(pack, ' &gt; ' ORDER BY ts)</code></td></tr>
+              <tr><td>ARRAY_AGG</td><td>Gom vào array</td><td><code>ARRAY_AGG(event_name ORDER BY ts)</code></td></tr>
+            </tbody>
+          </table>
+
+          <h3>GROUP BY extensions</h3>
+<pre><code>-- ROLLUP / CUBE / GROUPING SETS (varies by DB)
+SELECT date, country, SUM(revenue)
+FROM t
+GROUP BY ROLLUP(date, country);</code></pre>
+          <div class="note">
+            <b>Tip:</b> Nếu cần “metric theo ngày & tổng tất cả”, dùng <code>GROUPING SETS</code>/<code>ROLLUP</code> thay vì UNION thủ công (nếu engine hỗ trợ).
+          </div>
+        </section>
+
+        <section class="card" id="window">
+          <h2>6) Window Functions (Analytic)</h2>
+          <div class="two">
+            <div>
+              <h3>Ranking</h3>
+<pre><code>ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY ts DESC)
+RANK()       OVER(PARTITION BY user_id ORDER BY score DESC)
+DENSE_RANK() OVER(PARTITION BY user_id ORDER BY score DESC)</code></pre>
+              <p class="muted"><b>ROW_NUMBER</b>: unique per row; <b>RANK</b>: gaps; <b>DENSE_RANK</b>: no gaps.</p>
+
+              <h3>Navigation</h3>
+<pre><code>LAG(value, 1)  OVER(PARTITION BY user_id ORDER BY ts)
+LEAD(value, 1) OVER(PARTITION BY user_id ORDER BY ts)
+FIRST_VALUE(value) OVER(...)
+LAST_VALUE(value)  OVER(...)</code></pre>
+            </div>
+            <div>
+              <h3>Frames (ROWS vs RANGE)</h3>
+<pre><code>-- Rolling 7 rows
+SUM(revenue) OVER(
+  PARTITION BY user_id
+  ORDER BY event_date
+  ROWS BETWEEN 6 PRECEDING AND CURRENT ROW
+)
+
+-- Rolling 7 days (time-based)
+SUM(daily_revenue) OVER(
+  PARTITION BY user_id
+  ORDER BY event_date
+  RANGE BETWEEN INTERVAL 6 DAY PRECEDING AND CURRENT ROW
+)</code></pre>
+              <div class="note warn">
+                <b>Gotcha:</b> <code>RANGE</code> có thể “ôm” các peer rows khi ORDER BY bị trùng (tie) ⇒ kết quả bất ngờ. Hãy pre-aggregate hoặc thêm tie-breaker.
+              </div>
+            </div>
+          </div>
+
+          <h3>QUALIFY (BigQuery/Snowflake)</h3>
+<pre><code>SELECT *
+FROM events
+QUALIFY ROW_NUMBER() OVER(PARTITION BY user_id ORDER BY event_ts DESC, event_id DESC) = 1;</code></pre>
+        </section>
+
+        <section class="card" id="string">
+          <h2>7) String Functions</h2>
+          <table>
+            <thead><tr><th>Nhóm</th><th>Hàm</th><th>Ví dụ</th></tr></thead>
+            <tbody>
+              <tr><td>Case</td><td>UPPER, LOWER, INITCAP</td><td><code>UPPER(name)</code></td></tr>
+              <tr><td>Trim</td><td>TRIM, LTRIM, RTRIM</td><td><code>TRIM(col)</code></td></tr>
+              <tr><td>Substr</td><td>SUBSTR/SUBSTRING, LEFT, RIGHT</td><td><code>SUBSTR(col,1,3)</code></td></tr>
+              <tr><td>Find</td><td>POSITION/INSTR/STRPOS</td><td><code>STRPOS(col,'abc')</code></td></tr>
+              <tr><td>Replace</td><td>REPLACE, REGEXP_REPLACE</td><td><code>REGEXP_REPLACE(col, r'\s+', ' ')</code></td></tr>
+              <tr><td>Regex</td><td>REGEXP_CONTAINS, REGEXP_EXTRACT</td><td><code>REGEXP_EXTRACT(url, r'utm_source=([^&amp;]+)')</code></td></tr>
+              <tr><td>Concat</td><td>CONCAT, STRING_AGG</td><td><code>CONCAT(a,'-',b)</code></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card" id="date">
+          <h2>8) Date/Time Functions</h2>
+          <div class="two">
+            <div>
+              <h3>Construction & conversion</h3>
+<pre><code>-- BigQuery-ish examples
+CURRENT_DATE()
+CURRENT_TIMESTAMP()
+DATE(ts)                 -- cast/convert
+TIMESTAMP(date)          -- convert
+PARSE_DATE('%Y%m%d', s)
+FORMAT_DATE('%Y-%m', d)</code></pre>
+            </div>
+            <div>
+              <h3>Date arithmetic</h3>
+<pre><code>DATE_ADD(d, INTERVAL 7 DAY)
+DATE_SUB(d, INTERVAL 30 DAY)
+
+TIMESTAMP_ADD(ts, INTERVAL 5 MINUTE)
+TIMESTAMP_SUB(ts, INTERVAL 90 DAY)
+
+DATE_DIFF(d2, d1, DAY)   -- days between
+EXTRACT(DAYOFWEEK FROM d)</code></pre>
+            </div>
+          </div>
+          <div class="note warn">
+            <b>Time zone:</b> Khi reporting theo ngày, phải thống nhất timezone (UTC vs local). Nhiều sai số retention/LTV đến từ việc cast timestamp → date sai timezone.
+          </div>
+        </section>
+
+        <section class="card" id="null">
+          <h2>9) NULL handling & Conditional</h2>
+          <div class="two">
+            <div>
+              <h3>NULL helpers</h3>
+<pre><code>COALESCE(a, b, c)   -- first non-null
+IFNULL(a, b)        -- BigQuery/MySQL
+NVL(a, b)           -- Oracle
+NULLIF(a, b)        -- returns NULL if a=b</code></pre>
+            </div>
+            <div>
+              <h3>CASE / IF</h3>
+<pre><code>CASE
+  WHEN revenue &gt;= 100 THEN 'whale'
+  WHEN revenue &gt; 0 THEN 'payer'
+  ELSE 'nonpayer'
+END AS payer_tier
+
+-- BigQuery IF
+IF(condition, true_expr, false_expr)</code></pre>
+            </div>
+          </div>
+          <div class="note">
+            <b>Tip:</b> <code>COUNT(col)</code> bỏ qua NULL; muốn đếm tất cả dòng dùng <code>COUNT(*)</code>.
+          </div>
+        </section>
+
+        <section class="card" id="math">
+          <h2>10) Numeric/Math</h2>
+          <table>
+            <thead><tr><th>Hàm</th><th>Mô tả</th><th>Ví dụ</th></tr></thead>
+            <tbody>
+              <tr><td>ROUND, CEIL/CEILING, FLOOR</td><td>Làm tròn</td><td><code>ROUND(x,2)</code></td></tr>
+              <tr><td>ABS, SIGN</td><td>Trị tuyệt đối, dấu</td><td><code>ABS(delta)</code></td></tr>
+              <tr><td>POWER, SQRT</td><td>Lũy thừa, căn</td><td><code>POWER(x,2)</code></td></tr>
+              <tr><td>LOG, LN, EXP</td><td>Log / e^x</td><td><code>LN(x)</code></td></tr>
+              <tr><td>SAFE_DIVIDE</td><td>Chia an toàn (BigQuery)</td><td><code>SAFE_DIVIDE(a,b)</code></td></tr>
+              <tr><td>MOD</td><td>Phần dư</td><td><code>MOD(n, 7)</code></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section class="card" id="json">
+          <h2>11) JSON / Semi-structured</h2>
+          <p class="muted">Tên hàm thay đổi theo DB. BigQuery có <code>JSON_VALUE</code>/<code>JSON_QUERY</code> và <code>JSON_EXTRACT*</code> (tuỳ chế độ).</p>
+<pre><code>-- BigQuery (tuỳ version/typing)
+JSON_VALUE(json_col, '$.user.id')        -- scalar
+JSON_QUERY(json_col, '$.items')          -- object/array as JSON
+
+-- Legacy-ish patterns
+JSON_EXTRACT_SCALAR(json_col, '$.user.id')
+JSON_EXTRACT(json_col, '$.items')</code></pre>
+          <div class="note">
+            <b>Tip:</b> JSON thường nên “flatten” sang cột chuẩn trong staging để query/report nhanh & rẻ.
+          </div>
+        </section>
+
+        <section class="card" id="array">
+          <h2>12) Arrays & UNNEST (BigQuery-heavy)</h2>
+<pre><code>-- Flatten array
+SELECT user_id, item
+FROM t, UNNEST(t.items) AS item;
+
+-- Aggregate back
+SELECT user_id, ARRAY_AGG(item ORDER BY item) AS items
+FROM flat
+GROUP BY user_id;</code></pre>
+          <div class="note warn">
+            <b>Gotcha:</b> UNNEST có thể tạo “row explosion”. Hãy lọc sớm và tránh join chéo không cần thiết.
+          </div>
+        </section>
+
+        <section class="card" id="pivot">
+          <h2>13) PIVOT / UNPIVOT</h2>
+          <div class="two">
+            <div>
+              <h3>PIVOT (concept)</h3>
+<pre><code>-- Convert rows to columns (varies by DB)
+SELECT *
+FROM (
+  SELECT user_id, metric_name, metric_value FROM t
+)
+PIVOT (SUM(metric_value) FOR metric_name IN ('iap','ad','sessions'));</code></pre>
+            </div>
+            <div>
+              <h3>UNPIVOT (concept)</h3>
+<pre><code>-- Convert columns to rows (varies)
+SELECT *
+FROM wide_table
+UNPIVOT (metric_value FOR metric_name IN (iap, ad, sessions));</code></pre>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="cte">
+          <h2>14) CTE & Recursive</h2>
+          <div class="two">
+            <div>
+              <h3>CTE</h3>
+<pre><code>WITH base AS (
+  SELECT ... FROM ...
+),
+agg AS (
+  SELECT key, SUM(val) s FROM base GROUP BY key
+)
+SELECT * FROM agg;</code></pre>
+            </div>
+            <div>
+              <h3>Recursive CTE (hierarchy)</h3>
+<pre><code>WITH RECURSIVE tree AS (
+  SELECT id, parent_id, 0 AS depth
+  FROM nodes WHERE parent_id IS NULL
+  UNION ALL
+  SELECT n.id, n.parent_id, t.depth + 1
+  FROM nodes n
+  JOIN tree t ON n.parent_id = t.id
+)
+SELECT * FROM tree;</code></pre>
+              <p class="muted">Không phải engine nào cũng hỗ trợ recursive CTE (BigQuery hỗ trợ).</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="perf">
+          <h2>15) Performance patterns (đặc biệt hữu ích trên BigQuery/Cloud DWH)</h2>
+          <table>
+            <thead><tr><th>Pattern</th><th>Vì sao nhanh/rẻ hơn</th><th>Ví dụ</th></tr></thead>
+            <tbody>
+              <tr><td>Filter sớm (predicate pushdown)</td><td>Giảm scan</td><td><code>WHERE event_date BETWEEN ...</code></td></tr>
+              <tr><td>Pre-aggregate</td><td>Giảm row explosion & window cost</td><td>1 row/user/day trước khi rolling</td></tr>
+              <tr><td>Partitioning</td><td>Prune partitions</td><td>Partition by <code>event_date</code></td></tr>
+              <tr><td>Clustering</td><td>Giảm bytes đọc trong partition</td><td>Cluster by <code>user_id, event_name</code></td></tr>
+              <tr><td>Use QUALIFY</td><td>Gọn + tránh subquery</td><td>Latest row per user</td></tr>
+              <tr><td>UNION ALL</td><td>Tránh distinct</td><td>Append datasets</td></tr>
+            </tbody>
+          </table>
+          <div class="note">
+            <b>Rule of thumb:</b> trong cloud DWH, “cost” gần như tỷ lệ với bytes scanned ⇒ filter & partition đúng là quan trọng nhất.
+          </div>
+        </section>
+
+        <section class="card" id="quality">
+          <h2>16) Data quality & dedup patterns</h2>
+          <h3>Deduplicate latest record per key</h3>
+<pre><code>SELECT * FROM t
+QUALIFY ROW_NUMBER() OVER(
+  PARTITION BY user_id, event_id
+  ORDER BY ingestion_ts DESC
+) = 1;</code></pre>
+
+          <h3>Idempotent incremental load (lookback + merge)</h3>
+<pre><code>-- pseudo
+WITH src AS (
+  SELECT * FROM raw
+  WHERE event_date BETWEEN DATE_SUB(@run_date, INTERVAL 7 DAY) AND @run_date
+),
+dedup AS (
+  SELECT * EXCEPT(rn) FROM (
+    SELECT src.*,
+    ROW_NUMBER() OVER(PARTITION BY event_id ORDER BY ingestion_ts DESC) rn
+    FROM src
+  ) WHERE rn = 1
+)
+MERGE INTO fact T
+USING dedup S
+ON T.event_id = S.event_id
+WHEN MATCHED THEN UPDATE SET ...
+WHEN NOT MATCHED THEN INSERT (...);</code></pre>
+        </section>
+
+        <section class="card" id="interview">
+          <h2>17) Interview “gotchas” (nhớ để trả lời sắc)</h2>
+          <ul>
+            <li><b>WHERE vs HAVING vs QUALIFY</b>: lọc theo phase khác nhau (row/group/window).</li>
+            <li><b>ROW_NUMBER vs RANK vs DENSE_RANK</b>: tie handling; top-N có thể khác.</li>
+            <li><b>COUNT(*) vs COUNT(col)</b>: NULL behavior.</li>
+            <li><b>RANGE frame</b>: peer rows khi tie; pre-aggregate để tránh “nhảy số”.</li>
+            <li><b>JOIN explosion</b>: đặc biệt với UNNEST/arrays; luôn kiểm soát grain.</li>
+            <li><b>Deterministic ordering</b>: thêm tie-breaker (event_id).</li>
+          </ul>
+          <div class="foot">Nếu bạn dùng BigQuery nhiều: ưu tiên partition filter theo <code>event_date</code> để tránh scan toàn bảng.</div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+<script>
+  // Copy buttons
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const sel = btn.getAttribute('data-copy');
+      const el = document.querySelector(sel);
+      if(!el) return;
+      const text = el.innerText;
+      try{
+        await navigator.clipboard.writeText(text);
+        const old = btn.innerText;
+        btn.innerText = 'Copied';
+        setTimeout(()=>btn.innerText = old, 900);
+      }catch(e){
+        alert('Copy failed. Select text manually.');
+      }
+    });
+  });
+
+  // Search filter across sections
+  const q = document.getElementById('q');
+  const sections = [...document.querySelectorAll('#content section.card')];
+  function norm(s){ return (s||'').toLowerCase(); }
+  q.addEventListener('input', () => {
+    const term = norm(q.value).trim();
+    if(!term){
+      sections.forEach(s => s.classList.remove('hide'));
+      return;
+    }
+    sections.forEach(s => {
+      const text = norm(s.innerText);
+      s.classList.toggle('hide', !text.includes(term));
+    });
+  });
+</script>
+</body>
+</html>
