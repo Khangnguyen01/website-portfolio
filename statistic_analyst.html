@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Statistical Cheatsheet cho Data Analyst (Game)</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0f172a;
+      color: #e5e7eb;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+    h1, h2, h3, h4 {
+      margin: 0 0 8px;
+      font-weight: 600;
+    }
+    h1 {
+      font-size: 28px;
+      color: #fbbf24;
+    }
+    h2 {
+      margin-top: 28px;
+      font-size: 22px;
+      color: #fde68a;
+      border-left: 4px solid #fbbf24;
+      padding-left: 8px;
+    }
+    h3 {
+      font-size: 18px;
+      color: #e5e7eb;
+    }
+    h4 {
+      font-size: 15px;
+      margin-top: 10px;
+      color: #e5e7eb;
+    }
+    p {
+      margin: 4px 0 8px;
+      font-size: 14px;
+      color: #e5e7eb;
+    }
+    .tagline {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 20px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+    .card {
+      background: rgba(15,23,42,0.9);
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid #1f2937;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+    }
+    .pill {
+      display: inline-block;
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: #111827;
+      border: 1px solid #374151;
+      color: #9ca3af;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    code {
+      background: #111827;
+      padding: 1px 4px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #e5e7eb;
+    }
+    .math {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      background: #020617;
+      padding: 4px 6px;
+      border-radius: 4px;
+      display: inline-block;
+      margin: 2px 0;
+      font-size: 12px;
+    }
+    .highlight {
+      color: #fbbf24;
+      font-weight: 500;
+    }
+    ul {
+      margin: 4px 0 8px 18px;
+      padding: 0;
+      font-size: 14px;
+    }
+    li {
+      margin-bottom: 4px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    th, td {
+      border: 1px solid #1f2937;
+      padding: 6px 8px;
+      text-align: left;
+    }
+    th {
+      background: #111827;
+      color: #e5e7eb;
+    }
+    tr:nth-child(even) td {
+      background: #020617;
+    }
+    .note {
+      font-size: 12px;
+      color: #9ca3af;
+      margin-top: 4px;
+    }
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .small {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .badge-row {
+      margin-bottom: 4px;
+      font-size: 11px;
+    }
+    .badge {
+      display: inline-block;
+      margin-right: 6px;
+      margin-bottom: 2px;
+      padding: 2px 6px;
+      border-radius: 999px;
+      border: 1px solid #374151;
+      color: #9ca3af;
+      background: #020617;
+    }
+    .footer {
+      margin-top: 32px;
+      font-size: 11px;
+      color: #6b7280;
+      text-align: center;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #1f2937;
+      margin: 16px 0;
+    }
+    .subsection-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-top: 6px;
+      margin-bottom: 2px;
+      color: #e5e7eb;
+    }
+    .mono {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Statistical Cheatsheet cho Data Analyst (Game)</h1>
+    <p class="tagline">
+      Tập trung vào 4 phân phối cơ bản và các loại test thường dùng trong A/B test, retention, conversion, pay.
+    </p>
+
+    <!-- 1. Phân phối cơ bản -->
+    <h2>1. Phân phối cơ bản (Định nghĩa + Công thức + Ví dụ)</h2>
+    <div class="grid">
+      <!-- Normal -->
+      <div class="card">
+        <div class="pill">Normal (Chuẩn)</div>
+        <h3>Normal distribution</h3>
+        <p><span class="highlight">Dùng khi</span>: dữ liệu <b>liên tục</b>, histogram gần “chuông”.</p>
+        <p><span class="highlight">Ký hiệu</span>: <code>X ~ N(μ, σ²)</code></p>
+
+        <div class="subsection-title">Công thức PDF</div>
+        <div class="math">
+          f(x) = 1 / √(2πσ²) · exp( −(x − μ)² / (2σ²) ), x ∈ ℝ
+        </div>
+        <p>
+          <span class="highlight">Kỳ vọng</span>: E[X] = μ,
+          <span class="highlight">phương sai</span>: Var(X) = σ².
+        </p>
+
+        <div class="subsection-title">Ví dụ game</div>
+        <ul>
+          <li>Giả sử D1 playtime (phút) ~ N(μ = 30, σ = 5).</li>
+          <li>Câu hỏi: P(25 ≤ X ≤ 35)?</li>
+        </ul>
+        <p>
+          Chuẩn hóa về Z:
+        </p>
+        <div class="math">
+          Z = (X − μ)/σ<br />
+          P(25 ≤ X ≤ 35) = P( (25−30)/5 ≤ Z ≤ (35−30)/5 ) = P(−1 ≤ Z ≤ 1)
+        </div>
+        <p class="note">
+          Sử dụng bảng Z hoặc hàm Normal CDF để tra P(−1 ≤ Z ≤ 1) ≈ 0.68 (quy tắc 68–95–99.7).
+        </p>
+        <p><span class="highlight">Ứng dụng:</span> ước lượng, interval, t-test, regression error.</p>
+      </div>
+
+      <!-- Binomial -->
+      <div class="card">
+        <div class="pill">Binomial</div>
+        <h3>Binomial distribution</h3>
+        <p><span class="highlight">Dùng khi</span>: đếm số lần <b>thành công</b> trong <b>n lần thử cố định</b>.</p>
+        <p><span class="highlight">Ký hiệu</span>: <code>X ~ Binomial(n, p)</code></p>
+
+        <div class="subsection-title">Công thức PMF</div>
+        <div class="math">
+          P(X = k) = C(n, k) · p^k · (1 − p)^(n − k),<br />
+          k = 0, 1, ..., n
+        </div>
+        <p>
+          <span class="highlight">Kỳ vọng</span>: E[X] = n·p,
+          <span class="highlight">phương sai</span>: Var(X) = n·p·(1−p).
+        </p>
+
+        <div class="subsection-title">Ví dụ game</div>
+        <ul>
+          <li>Test 1: D7 retention trên 1000 user mới.</li>
+          <li>Giả sử xác suất 1 user được retain D7 là p = 0.05.</li>
+          <li>X = số user D7 = 1 ⇒ X ~ Binomial(1000, 0.05).</li>
+        </ul>
+        <p>
+          Câu hỏi: P(<span class="mono">X = 50</span>)?
+        </p>
+        <div class="math">
+          P(X = 50) = C(1000, 50) · 0.05^50 · 0.95^950
+        </div>
+        <p class="note">
+          Thực tế dùng máy tính / thư viện để tính. Khi n lớn, Binomial ≈ Normal hoặc dùng Z-test cho tỉ lệ.
+        </p>
+      </div>
+
+      <!-- Poisson -->
+      <div class="card">
+        <div class="pill">Poisson</div>
+        <h3>Poisson distribution</h3>
+        <p><span class="highlight">Dùng khi</span>: đếm số event trong một <b>khoảng thời gian / không gian</b> với rate λ.</p>
+        <p><span class="highlight">Ký hiệu</span>: <code>X ~ Poisson(λ)</code></p>
+
+        <div class="subsection-title">Công thức PMF</div>
+        <div class="math">
+          P(X = k) = e^(−λ) · λ^k / k!,<br />
+          k = 0, 1, 2, ...
+        </div>
+        <p>
+          <span class="highlight">Kỳ vọng</span>: E[X] = λ,
+          <span class="highlight">phương sai</span>: Var(X) = λ.
+        </p>
+
+        <div class="subsection-title">Ví dụ game</div>
+        <ul>
+          <li>Số crash server/giờ ~ Poisson(λ = 2).</li>
+        </ul>
+        <p>
+          Câu hỏi: P(trong 1 giờ không có crash nào)?
+        </p>
+        <div class="math">
+          P(X = 0) = e^(−2) · 2^0 / 0! = e^(−2) ≈ 0.1353
+        </div>
+        <p class="note">
+          Dùng để model count event hiếm: crash, error log, purchase trên traffic thấp,...
+        </p>
+      </div>
+
+      <!-- Exponential -->
+      <div class="card">
+        <div class="pill">Exponential</div>
+        <h3>Exponential distribution</h3>
+        <p><span class="highlight">Dùng khi</span>: đo <b>thời gian chờ</b> đến sự kiện trong process Poisson.</p>
+        <p><span class="highlight">Ký hiệu</span>: <code>T ~ Exponential(λ)</code></p>
+
+        <div class="subsection-title">Công thức PDF &amp; CDF</div>
+        <div class="math">
+          f(t) = λ · e^(−λ t), t ≥ 0<br />
+          F(t) = P(T ≤ t) = 1 − e^(−λ t)
+        </div>
+        <p>
+          <span class="highlight">Kỳ vọng</span>: E[T] = 1/λ,
+          <span class="highlight">phương sai</span>: Var(T) = 1/λ².
+        </p>
+
+        <div class="subsection-title">Ví dụ game</div>
+        <ul>
+          <li>Giả sử rate crash = 0.5 crash/giờ ⇒ λ = 0.5.</li>
+          <li>T = thời gian (giờ) từ bây giờ đến crash tiếp theo.</li>
+        </ul>
+        <p>
+          Câu hỏi: P(trong 2 giờ tới không xảy ra crash)?
+        </p>
+        <div class="math">
+          P(T &gt; 2) = 1 − F(2) = e^(−λ·2) = e^(−1) ≈ 0.3679
+        </div>
+        <p class="note">
+          Liên hệ: nếu số crash/giờ ~ Poisson(λ) thì thời gian giữa các crash ~ Exponential(λ).
+        </p>
+      </div>
+    </div>
+
+    <!-- 2. Chọn test theo mục tiêu -->
+    <h2>2. Chọn test theo mục tiêu & kiểu dữ liệu</h2>
+    <div class="card">
+      <div class="section-header">
+        <h3>Bảng tổng quan</h3>
+        <span class="small">Tập trung các test cơ bản</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Mục tiêu</th>
+            <th>Kiểu dữ liệu</th>
+            <th>Thiết kế</th>
+            <th>Test thường dùng</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>So sánh trung bình 2 nhóm</td>
+            <td>Liên tục (playtime, revenue...)</td>
+            <td>2 nhóm độc lập (A/B)</td>
+            <td><b>Independent t-test</b> (Welch t-test)</td>
+          </tr>
+          <tr>
+            <td>So sánh trung bình trước/sau</td>
+            <td>Liên tục</td>
+            <td>Cùng user, before/after</td>
+            <td><b>Paired t-test</b></td>
+          </tr>
+          <tr>
+            <td>So sánh tỉ lệ 2 nhóm</td>
+            <td>Nhị phân 0/1 (retention, pay...)</td>
+            <td>2 nhóm độc lập</td>
+            <td><b>2-sample Z-test cho tỉ lệ</b></td>
+          </tr>
+          <tr>
+            <td>So sánh phân phối category</td>
+            <td>Category (quốc gia, device,...)</td>
+            <td>2 biến phân loại</td>
+            <td><b>Chi-square test of independence</b></td>
+          </tr>
+          <tr>
+            <td>So sánh trung bình &gt;= 3 nhóm</td>
+            <td>Liên tục</td>
+            <td>&gt;= 3 nhóm độc lập</td>
+            <td><b>One-way ANOVA</b></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="note">
+        Nguyên tắc: <b>Liên tục → t-test / ANOVA</b>, <b>Nhị phân → Z-test tỉ lệ</b>, <b>Category → Chi-square</b>.
+      </p>
+    </div>
+
+    <!-- 3. Independent t-test -->
+    <h2>3. Independent t-test (2 nhóm độc lập)</h2>
+    <div class="card">
+      <div class="badge-row">
+        <span class="badge">Metric liên tục</span>
+        <span class="badge">A/B test</span>
+        <span class="badge">2 group khác user</span>
+      </div>
+      <p><span class="highlight">Dùng khi</span>: so sánh mean giữa 2 nhóm user khác nhau (không trùng user).</p>
+
+      <h4>Dataset ví dụ (Tutorial mới vs cũ, D1 playtime)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>n</th>
+            <th>Mean D1 (phút)</th>
+            <th>Std (sd)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A (control)</td>
+            <td>1000</td>
+            <td>30</td>
+            <td>10</td>
+          </tr>
+          <tr>
+            <td>B (treatment)</td>
+            <td>1000</td>
+            <td>32</td>
+            <td>11</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Công thức & bước tính</h4>
+      <ol>
+        <li>
+          <b>Giả thuyết</b><br />
+          H₀: μ_A = μ_B (tutorial mới không ảnh hưởng D1)<br />
+          H₁: μ_B &gt; μ_A (tutorial mới tăng D1)
+        </li>
+        <li>
+          <b>Test statistic (Welch t-test)</b><br />
+          <span class="math">
+            t = (mean_A − mean_B) / √( sd_A²/n_A + sd_B²/n_B )
+          </span><br />
+          Với ví dụ (xấp xỉ):<br />
+          <span class="math">
+            mean_A − mean_B = 30 − 32 = −2<br />
+            SE ≈ √(10²/1000 + 11²/1000) = √(0.221) ≈ 0.47<br />
+            t ≈ −2 / 0.47 ≈ −4.26
+          </span>
+        </li>
+        <li>
+          <b>p-value</b><br />
+          |t| lớn ⇒ p nhỏ ⇒ reject H₀ ⇒ D1 playtime B &gt; A có ý nghĩa thống kê.
+        </li>
+      </ol>
+      <p class="note">
+        Thực tế dùng thư viện (Python/R/Excel). Bản chất: chênh lệch mean so với độ nhiễu (SE).
+      </p>
+    </div>
+
+    <!-- 4. Paired t-test -->
+    <h2>4. Paired t-test (trước/sau trên cùng user)</h2>
+    <div class="card">
+      <div class="badge-row">
+        <span class="badge">Metric liên tục</span>
+        <span class="badge">Before / After</span>
+        <span class="badge">Cùng user</span>
+      </div>
+      <p><span class="highlight">Dùng khi</span>: mỗi user có 2 lần đo (ví dụ ARPU trước vs sau promo).</p>
+
+      <h4>Dataset ví dụ (ARPU 7d trước & sau promo, 5 user)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Before</th>
+            <th>After</th>
+            <th>d = After − Before</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>1.00</td><td>1.30</td><td>0.30</td></tr>
+          <tr><td>2</td><td>0.50</td><td>0.80</td><td>0.30</td></tr>
+          <tr><td>3</td><td>2.00</td><td>2.10</td><td>0.10</td></tr>
+          <tr><td>4</td><td>1.50</td><td>1.70</td><td>0.20</td></tr>
+          <tr><td>5</td><td>3.00</td><td>3.40</td><td>0.40</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Tính: mean(d) ≈ 0.26, sd(d) ≈ 0.11, n = 5.
+      </p>
+
+      <h4>Công thức & bước tính</h4>
+      <ol>
+        <li>
+          <b>Giả thuyết trên d</b><br />
+          H₀: μ_d = 0 (ARPU không đổi)<br />
+          H₁: μ_d &gt; 0 (ARPU tăng sau promo)
+        </li>
+        <li>
+          <b>Test statistic</b><br />
+          <span class="math">
+            t = mean(d) / ( sd(d) / √n )
+          </span><br />
+          Thế số (xấp xỉ):<br />
+          <span class="math">
+            t ≈ 0.26 / (0.11 / √5) ≈ 5.1
+          </span>
+        </li>
+        <li>
+          <b>p-value</b><br />
+          df = n − 1 = 4, t ≈ 5.1 ⇒ p &lt; 0.01 ⇒ reject H₀ ⇒ ARPU tăng có ý nghĩa thống kê.
+        </li>
+      </ol>
+      <p class="note">
+        Paired t-test = 1-sample t-test trên vector chênh lệch d.
+      </p>
+    </div>
+
+    <!-- 5. Z-test cho tỉ lệ -->
+    <h2>5. Z-test cho tỉ lệ (conversion, pay, retention)</h2>
+    <div class="card">
+      <div class="badge-row">
+        <span class="badge">Nhị phân 0/1</span>
+        <span class="badge">Conversion / Pay / Retention</span>
+        <span class="badge">A/B test</span>
+      </div>
+      <p><span class="highlight">Dùng khi</span>: metric là tỉ lệ (proportion), mỗi user = 0 hoặc 1.</p>
+
+      <h4>Dataset ví dụ 1 – Pay rate A/B</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>n</th>
+            <th>Pay count</th>
+            <th>Pay rate</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A</td>
+            <td>1000</td>
+            <td>50</td>
+            <td>0.05</td>
+          </tr>
+          <tr>
+            <td>B</td>
+            <td>1200</td>
+            <td>90</td>
+            <td>0.075</td>
+          </tr>
+        </tbody>
+      </table>
+      <p><b>Goal</b>: pay rate B có cao hơn A đáng kể không?</p>
+
+      <h4>Công thức & bước tính</h4>
+      <ol>
+        <li>
+          <b>Giả thuyết</b><br />
+          H₀: p_A = p_B<br />
+          H₁: p_B &gt; p_A
+        </li>
+        <li>
+          <b>Tỉ lệ mẫu</b><br />
+          <span class="math">
+            p_A = x_A / n_A, p_B = x_B / n_B
+          </span>
+        </li>
+        <li>
+          <b>Pooled proportion</b><br />
+          <span class="math">
+            p_hat = (x_A + x_B) / (n_A + n_B)
+          </span>
+        </li>
+        <li>
+          <b>Standard error &amp; Z</b><br />
+          <span class="math">
+            SE = √( p_hat · (1 − p_hat) · (1/n_A + 1/n_B) )<br />
+            Z = (p_B − p_A) / SE
+          </span>
+        </li>
+        <li>
+          <b>p-value</b><br />
+          Z lớn ⇒ p nhỏ ⇒ reject H₀ ⇒ pay rate B ≠ A (hoặc &gt; A).
+        </li>
+      </ol>
+
+      <h4>Dataset ví dụ 2 – Feature RW ads &amp; D7 retention</h4>
+      <p>Feature: sau 20 level kể từ lần cuối IAP, nếu không IAP thì nhả rewarded ads.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>n</th>
+            <th>D7 = 1</th>
+            <th>D7 retention</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A (control)</td>
+            <td>10.000</td>
+            <td>4.000</td>
+            <td>0.40</td>
+          </tr>
+          <tr>
+            <td>B (feature)</td>
+            <td>9.800</td>
+            <td>4.312</td>
+            <td>≈ 0.44</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        Tóm tắt tính nhanh (concept):<br />
+        <span class="math">
+          p_A = 0.40, p_B ≈ 0.44<br />
+          p_hat ≈ 0.4198, SE ≈ 0.0070,<br />
+          Z ≈ (0.44 − 0.40)/0.0070 ≈ 5.7
+        </span><br />
+        ⇒ p rất nhỏ ⇒ feature tăng D7 retention có ý nghĩa thống kê.
+      </p>
+      <p class="note">
+        Điều kiện: n·p và n·(1−p) đủ lớn (≥ ~5–10) để dùng xấp xỉ Normal.
+      </p>
+    </div>
+
+    <!-- 6. Chi-square tests -->
+    <h2>6. Chi-square tests (independence &amp; goodness-of-fit)</h2>
+    <div class="card">
+      <div class="badge-row">
+        <span class="badge">Category vs Category</span>
+        <span class="badge">Bảng chéo</span>
+        <span class="badge">Kiểm tra phân phối</span>
+      </div>
+      <p><span class="highlight">2 dạng hay gặp</span>:</p>
+      <ul>
+        <li><b>Chi-square test of independence</b>: 2 biến category có độc lập không?</li>
+        <li><b>Chi-square goodness-of-fit</b>: phân phối quan sát có khớp phân phối kỳ vọng không?</li>
+      </ul>
+
+      <h4>Ví dụ 1 – Independence: Payer status vs Country</h4>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>US</th>
+            <th>VN</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Payer</td><td>40</td><td>10</td><td>50</td></tr>
+          <tr><td>Non-payer</td><td>60</td><td>90</td><td>150</td></tr>
+          <tr><td>Total</td><td>100</td><td>100</td><td>200</td></tr>
+        </tbody>
+      </table>
+
+      <ol>
+        <li>
+          <b>Giả thuyết</b><br />
+          H₀: Payer status độc lập với Country<br />
+          H₁: Có phụ thuộc (có mối quan hệ)
+        </li>
+        <li>
+          <b>Tính expected count</b><br />
+          Row totals: 50 (Payer), 150 (Non-payer)<br />
+          Col totals: 100 (US), 100 (VN), Grand total = 200<br />
+          <span class="math">
+            E_ij = (row_total_i · col_total_j) / grand_total
+          </span><br />
+          ⇒ E(Payer,US) = 25; E(Payer,VN) = 25;<br />
+          ⇒ E(Non,US) = 75; E(Non,VN) = 75.
+        </li>
+        <li>
+          <b>Chi-square statistic</b><br />
+          <span class="math">
+            χ² = Σ (O_ij − E_ij)² / E_ij
+          </span><br />
+          Thế số:<br />
+          (40−25)²/25 = 9; (10−25)²/25 = 9;<br />
+          (60−75)²/75 = 3; (90−75)²/75 = 3;<br />
+          ⇒ χ² = 9 + 9 + 3 + 3 = 24.
+        </li>
+        <li>
+          <b>p-value</b><br />
+          df = (rows−1)(cols−1) = 1;<br />
+          χ² = 24 với df = 1 ⇒ p &lt;&lt; 0.001 ⇒ reject H₀ ⇒ payer status &amp; country không độc lập.
+        </li>
+      </ol>
+
+      <h4>Ví dụ 2 – Goodness-of-fit: phân phối click theo placement</h4>
+      <p>Giả sử bạn có 4 placement ads: A, B, C, D. Thiết kế kỳ vọng mỗi placement nhận ~25% click.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Placement</th>
+            <th>Observed click</th>
+            <th>Expected (25% của 1000)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>A</td><td>260</td><td>250</td></tr>
+          <tr><td>B</td><td>220</td><td>250</td></tr>
+          <tr><td>C</td><td>180</td><td>250</td></tr>
+          <tr><td>D</td><td>340</td><td>250</td></tr>
+        </tbody>
+      </table>
+      <ol>
+        <li>
+          <b>Giả thuyết</b><br />
+          H₀: phân phối click = [25%, 25%, 25%, 25%]<br />
+          H₁: ít nhất một placement lệch so với 25%.
+        </li>
+        <li>
+          <b>Chi-square statistic</b><br />
+          <span class="math">
+            χ² = Σ (O_i − E_i)² / E_i
+          </span><br />
+          Thế số (xấp xỉ):<br />
+          (260−250)²/250 = 100/250 = 0.4<br />
+          (220−250)²/250 = 900/250 = 3.6<br />
+          (180−250)²/250 = 4900/250 = 19.6<br />
+          (340−250)²/250 = 8100/250 = 32.4<br />
+          ⇒ χ² ≈ 0.4 + 3.6 + 19.6 + 32.4 = 56.0
+        </li>
+        <li>
+          <b>p-value</b><br />
+          df = k − 1 = 4 − 1 = 3;<br />
+          χ² = 56 với df=3 ⇒ p rất nhỏ ⇒ reject H₀ ⇒ phân phối click lệch mạnh khỏi 25–25–25–25.
+        </li>
+      </ol>
+      <p class="note">
+        Rule of thumb: expected count mỗi ô ≥ 5 để xấp xỉ Chi-square ổn định.
+      </p>
+    </div>
+
+    <!-- 7. ANOVA -->
+    <h2>7. ANOVA (phân tích phương sai – so sánh &gt;= 3 nhóm)</h2>
+    <div class="card">
+      <div class="badge-row">
+        <span class="badge">Metric liên tục</span>
+        <span class="badge">&gt;= 3 nhóm</span>
+        <span class="badge">One-way ANOVA</span>
+      </div>
+      <p>
+        <span class="highlight">Ý tưởng</span>: mở rộng t-test sang trường hợp &gt;= 3 nhóm.<br />
+        Thay vì test từng cặp (A vs B, A vs C, B vs C) nhiều lần, ANOVA test <b>1 lần</b>:
+      </p>
+      <p class="math">
+        H₀: μ₁ = μ₂ = ... = μ_k<br />
+        H₁: tồn tại i, j sao cho μ_i ≠ μ_j
+      </p>
+      <p class="note">
+        ANOVA kiểm tra <b>“có ít nhất một mean khác biệt”</b>, không nói nhóm nào khác. Nếu reject H₀, thường làm thêm post-hoc (Tukey, Bonferroni,...) để tìm cặp khác nhau.
+      </p>
+
+      <h4>One-way ANOVA – ví dụ cụ thể (3 version tutorial)</h4>
+      <p>Giả sử bạn test 3 version tutorial: A, B, C. Metric: D1 playtime (phút).</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>D1 playtime (phút)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>A</td><td>30, 32, 29, 31</td></tr>
+          <tr><td>B</td><td>35, 36, 34, 37</td></tr>
+          <tr><td>C</td><td>28, 27, 29, 26</td></tr>
+        </tbody>
+      </table>
+      <p>
+        Tóm tắt số liệu:
+      </p>
+      <ul>
+        <li>Group A: n₁ = 4, mean_A = 30.5</li>
+        <li>Group B: n₂ = 4, mean_B = 35.5</li>
+        <li>Group C: n₃ = 4, mean_C = 27.5</li>
+        <li>Grand mean (mean chung) ≈ 31.17</li>
+      </ul>
+
+      <h4>Công thức cơ bản</h4>
+      <p><b>1) Tổng số quan sát</b></p>
+      <div class="math">
+        N = n₁ + n₂ + ... + n_k
+      </div>
+
+      <p><b>2) Tổng bình phương giữa nhóm (SSB – Between)</b></p>
+      <div class="math">
+        SSB = Σ n_g · (mean_g − grand_mean)²
+      </div>
+      <p>Với ví dụ (xấp xỉ):</p>
+      <div class="math">
+        SSB ≈ 130.67
+      </div>
+
+      <p><b>3) Tổng bình phương trong nhóm (SSW – Within)</b></p>
+      <div class="math">
+        SSW = Σ Σ (x_{ig} − mean_g)²
+      </div>
+      <p>Với ví dụ (xấp xỉ):</p>
+      <div class="math">
+        SSW = 15.0
+      </div>
+
+      <p><b>4) Bậc tự do</b></p>
+      <div class="math">
+        df_between = k − 1 = 3 − 1 = 2<br />
+        df_within = N − k = 12 − 3 = 9
+      </div>
+
+      <p><b>5) Mean square &amp; F-statistic</b></p>
+      <div class="math">
+        MSB = SSB / df_between ≈ 130.67 / 2 ≈ 65.33<br />
+        MSW = SSW / df_within = 15 / 9 ≈ 1.67<br />
+        F = MSB / MSW ≈ 65.33 / 1.67 ≈ 39.2
+      </div>
+
+      <p><b>6) Đọc p-value</b></p>
+      <p>
+        So sánh F với phân phối F(df_between, df_within). Với F ≈ 39.2, df₁=2, df₂=9 ⇒ p rất nhỏ (&lt;&lt; 0.01).<br />
+        ⇒ Reject H₀ ⇒ <b>ít nhất một tutorial có mean playtime khác biệt</b>.
+      </p>
+
+      <p class="note">
+        One-way ANOVA = so sánh <b>tỉ lệ giữa “variance giữa nhóm” và “variance trong nhóm”</b>.
+        Nếu variance giữa nhóm ≫ variance trong nhóm ⇒ F lớn ⇒ có khác biệt mean.
+      </p>
+
+      <h4>One-way ANOVA vs t-test</h4>
+      <ul>
+        <li>2 nhóm: t-test và ANOVA cho kết quả tương đương (F = t²).</li>
+        <li>&gt;= 3 nhóm: dùng ANOVA để tránh chạy nhiều t-test (tăng risk type I error).</li>
+      </ul>
+
+      <h4>Gợi ý về các biến thể ANOVA</h4>
+      <ul>
+        <li><b>One-way ANOVA</b>: 1 yếu tố (factor), nhiều mức (level) – ví dụ: 3 tutorial.</li>
+        <li><b>Two-way ANOVA</b>: 2 yếu tố (ví dụ: tutorial × platform), có thể xét cả interaction.</li>
+        <li><b>Repeated measures ANOVA</b>: giống “many-level paired t-test”, cùng đối tượng đo nhiều lần.</li>
+      </ul>
+    </div>
+
+    <!-- 8. Quick flow -->
+    <h2>8. Quick flow: chọn test trong thực tế</h2>
+    <div class="card">
+      <ol>
+        <li>
+          <b>Xác định kiểu biến</b><br />
+          – Liên tục (playtime, revenue, time, số ngày active...)<br />
+          – Nhị phân 0/1 (retention, pay, convert...)<br />
+          – Category (country, device, segment...)
+        </li>
+        <li>
+          <b>Xác định thiết kế</b><br />
+          – 2 nhóm độc lập (A/B random)<br />
+          – Cùng user, đo 2 lần (before/after)<br />
+          – &gt;= 3 nhóm độc lập (A/B/C, multi-variant test)<br />
+          – 2 biến category cần kiểm tra mối quan hệ
+        </li>
+        <li>
+          <b>Chọn test</b><br />
+          – Liên tục, 2 nhóm độc lập → <b>Independent t-test</b><br />
+          – Liên tục, before/after cùng user → <b>Paired t-test</b><br />
+          – Liên tục, &gt;= 3 nhóm độc lập → <b>One-way ANOVA</b><br />
+          – Nhị phân, so sánh tỉ lệ A/B → <b>Z-test cho tỉ lệ</b><br />
+          – Category vs Category → <b>Chi-square test of independence</b><br />
+          – 1 biến category vs phân phối kỳ vọng → <b>Chi-square goodness-of-fit</b>
+        </li>
+        <li>
+          <b>Luôn viết H₀ / H₁ &amp; diễn giải business</b><br />
+          Ví dụ: “Feature X tăng D7 từ 40% lên 44% (+4 điểm %, ~+10% tương đối),<br />
+          Z-test cho tỉ lệ: Z ≈ 5.7, p &lt; 10⁻⁶ ⇒ hiệu ứng có ý nghĩa thống kê.”
+        </li>
+      </ol>
+    </div>
+
+    <div class="footer">
+      Cheatsheet tóm tắt các phân phối &amp; test cơ bản cho A/B test, retention, conversion trong game analytics.
+    </div>
+  </div>
+</body>
+</html>
